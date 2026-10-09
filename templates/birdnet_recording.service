@@ -1,0 +1,10 @@
+[Unit]
+Description=BirdNET Recording
+[Service]
+Restart=always
+Type=simple
+RestartSec=3
+User=birder
+ExecStart=/usr/local/bin/birdnet_recording.sh
+[Install]
+WantedBy=multi-user.target

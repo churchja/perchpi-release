@@ -1,0 +1,48 @@
+# PerchPi pre-commit -- Audit #7 Phase A (local hooks only).
+# Purpose: catch non-patcher edits (manual nano/vim) before they reach a commit.
+# Patchers already run ast.parse + php -l + re.subn-with-count, so this is a
+# guardrail for the times the patcher is bypassed, not a replacement for it.
+# Deferred to Phase B: GitHub Actions, ruff auto-format, test-suite bootstrap.
+# Marker: perchpi:precommit-phase-a-v1
+
+fail_fast: false   # run every hook and report all, don't stop at first failure
+
+repos:
+  # --- ruff: BLOCK on parse-fatal + pyflakes real-bug codes only ---
+  #   E9  = syntax/IO errors (incl. E999 SyntaxError)
+  #   F63 = invalid assert / bad literal comparison
+  #   F7  = structural errors (break/continue/return/yield out of place)
+  #   F82 = undefined name / referenced-before-assignment
+  # Style + line-length + complexity intentionally NOT enabled (Phase B).
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.14   # run `pre-commit autoupdate` to fill this in
+    hooks:
+      - id: ruff
+        name: ruff (parse / pyflakes errors - BLOCKING)
+        args: ["--select", "E9,F63,F7,F82"]
+        exclude: ^\.local-patches/
+
+  # --- php -l: BLOCK on PHP syntax errors ---
+  # Quiet on success, prints the error (and aborts the commit) on failure.
+  - repo: local
+    hooks:
+      - id: php-lint
+        name: php -l (PHP syntax - BLOCKING)
+        entry: >-
+          bash -c 'err=0; for f in "$@"; do if ! php -l "$f" >/dev/null 2>&1; then php -l "$f"; err=1; fi; done; exit $err' --
+        language: system
+        files: ^(homepage|scripts)/.*\.php$
+        exclude: ^\.local-patches/
+
+  # --- shellcheck: WARN-ONLY (prints findings, never blocks) ---
+  # `|| true` forces exit 0 so a finding is advisory, not commit-aborting.
+  - repo: local
+    hooks:
+      - id: shellcheck-warn
+        name: shellcheck (warn-only - never blocks)
+        verbose: true
+        entry: >-
+          bash -c 'shellcheck "$@" || true' --
+        language: system
+        files: ^(scripts|perch|watchdog)/.*\.sh$|^deploy-.*\.sh$
+        exclude: ^\.local-patches/

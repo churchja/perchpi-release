@@ -1,0 +1,122 @@
+# PerchPi .gitignore (Phase A: private repo, backup + version control)
+
+# =============================================================================
+# SECRETS — must never be tracked
+# =============================================================================
+birdnet.conf
+birdnet.conf.*
+Caddyfile
+Caddyfile.*
+*.env
+.env
+.env.*
+*.predeparture-*
+
+# Allow committed templates / examples:
+!birdnet.conf.example
+!Caddyfile.example
+
+# =============================================================================
+# PERSONAL DATA (location, history, identity)
+# =============================================================================
+BirdDB.txt
+BirdDB.txt.*
+firstrun.ini
+!firstrun.ini.example
+IdentifiedSoFar.txt
+scripts/birds.db
+scripts/birds.db-shm
+scripts/birds.db-wal
+scripts/birds.db.bak*
+scripts/*.db
+scripts/*.db-*
+BirdSongs/
+homepage/**/*.user.jpg
+homepage/**/*.user.json
+
+# =============================================================================
+# LARGE BINARIES / DOWNLOADS (not source code)
+# =============================================================================
+*.onnx
+*.whl
+*.tflite
+model/*.tflite
+homepage/**/*.wikipedia.jpg
+homepage/**/*.flickr.jpg
+homepage/**/*.legacy.jpg
+
+# =============================================================================
+# PYTHON VENV
+# =============================================================================
+birdnet/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# =============================================================================
+# LOGS
+# =============================================================================
+*.log
+perch/worker.log
+homepage/php_errors.log
+
+# =============================================================================
+# BACKUP FILES (git is your backup now)
+# Multiple patterns to catch various conventions:
+#   foo.bak              (plain)
+#   foo.bak-20260508     (hyphen-suffix)
+#   foo.bak.e2           (dot-suffix)
+#   foo.v1-bak-20260506  (embedded -bak-)
+#   foo.legacy-clobber-* (legacy clobber)
+#   foo.before-*         (before-X save)
+# =============================================================================
+*.bak
+*.bak-*
+*.bak.*
+*-bak-*
+*.legacy-clobber-*
+*.before-*
+*.orig
+*.backup
+*~
+
+# =============================================================================
+# BACKUP DIRECTORIES / TARBALLS
+# =============================================================================
+homepage/backup-*/
+.local-patches/profile-backups-*/
+.local-patches/backups-session-*.tar.gz
+.local-patches/perchpi-checkpoint-*.tar.gz
+
+# =============================================================================
+# PER-STATION DATA (perchpi:s21a2-f9-v1): the UI lock list. Still tracked in the dev repo for
+# LIVE; the release repo leaves it out and the installer creates an empty one.
+# =============================================================================
+scripts/disk_check_exclude.txt
+
+# =============================================================================
+# INHERITED git of Nachtzuster — kept on disk for reference, never tracked
+# =============================================================================
+.git.nachtzuster.bak/
+.github.nachtzuster.bak/
+
+# =============================================================================
+# OS / editor cruft
+# =============================================================================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+geomodel/predictions.json
+watchdog/state.json
+watchdog/alerts.log
+*.bak-pin-deps-*
+geomodel/phenology.json
+geomodel/bird_mask.json

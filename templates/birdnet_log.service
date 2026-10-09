@@ -1,0 +1,11 @@
+[Unit]
+Description=BirdNET Analysis Log
+[Service]
+Restart=on-failure
+RestartSec=3
+Type=simple
+User=birder
+Environment=TERM=xterm-256color
+ExecStart=/usr/local/bin/gotty --address localhost -p 8080 --path log --title-format "BirdNET-Pi Log" birdnet_log.sh
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,11 @@
+[Unit]
+Description=BirdNET Stats
+[Service]
+Restart=on-failure
+RestartSec=5
+Type=simple
+User=birder
+ExecStart=/home/birder/BirdNET-Pi/birdnet/bin/streamlit run /home/birder/BirdNET-Pi/scripts/plotly_streamlit.py --browser.gatherUsageStats false --server.address localhost --server.baseUrlPath "/stats"
+
+[Install]
+WantedBy=multi-user.target

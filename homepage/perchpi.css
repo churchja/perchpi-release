@@ -1,0 +1,4350 @@
+/* ============================================================================
+   BirdNET-Pi / PerchPi Design System — v2 (kiosk-aligned)
+   ============================================================================
+   Production stylesheet. Replaces both legacy style.css and dark-style.css,
+   plus replaces v1 perchpi.css from C-2.1.
+
+   Design tokens are now aligned with kiosk.css so the admin web UI and the
+   kiosk display share one visual language. Pure black background, soft green
+   accent, kiosk's exact spacing and radii.
+
+   Build: Phase C-2.2 (Kiosk-aligned tokens + components for Overview)
+   ============================================================================ */
+
+/* ===== DESIGN TOKENS ====================================================== */
+:root,
+.theme-admin {
+  /* ── Surfaces (kiosk-aligned) ── */
+  --bg:              #000000;
+  --bg-page:         #000000;        /* alias for legacy refs */
+  --surface:         #111113;
+  --bg-elevated:     #111113;        /* alias */
+  --surface-2:       #1a1a1d;
+  --bg-overlay:      #1a1a1d;        /* alias */
+  --surface-3:       #232327;
+  --bg-input:        #1a1a1d;        /* alias */
+  --bg-hover:        #1f1f22;
+  --bg-active:       #232327;
+
+  /* ── Borders ── */
+  --border:          #2a2a2e;
+  --border-soft:     #1f1f22;
+  --border-subtle:   #1f1f22;        /* alias */
+  --border-default:  #2a2a2e;        /* alias */
+  --border-strong:   #3a3a3e;
+
+  /* ── Text ── */
+  --text:            #ffffff;
+  --text-primary:    #ffffff;        /* alias */
+  --text-dim:        #a8a8ad;
+  --text-secondary:  #a8a8ad;        /* alias */
+  --text-faint:      #6e6e73;
+  --text-tertiary:   #6e6e73;        /* alias */
+  --text-disabled:   #4a4a4a;
+  --text-inverse:    #000000;
+
+  /* ── Accents (kiosk green) ── */
+  --accent:          #4ade80;
+  --accent-dim:      #22c55e;
+  --accent-hover:    #5fe590;
+  --accent-muted:    #2d6b3f;
+  --accent-glow:     rgba(74, 222, 128, 0.15);
+
+  /* ── Status ── */
+  --status-ok:       #4ade80;
+  --status-warn:     #fbbf24;
+  --status-low:      #f87171;
+  --status-info:     #7ab8e8;
+  --danger:          #f87171;
+  --warn:            #fbbf24;
+
+  --status-ok-bg:    rgba(74, 222, 128, 0.1);
+  --status-warn-bg:  rgba(251, 191, 36, 0.1);
+  --status-low-bg:   rgba(248, 113, 113, 0.1);
+  --status-info-bg:  rgba(122, 184, 232, 0.1);
+
+  /* ── Typography ── */
+  /* SF Pro on Apple devices, Inter everywhere else (consistent cross-platform) */
+  --font-display: "SF Pro Display", "Inter", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  --font-body:    "SF Pro Text",    "Inter", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  --font-sans:    var(--font-body);
+  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --text-2xs:  0.6875rem;
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-md:   1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.375rem;
+  --text-2xl:  1.75rem;
+  --text-3xl:  2.25rem;
+  --text-4xl:  3rem;
+
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+
+  --leading-tight:   1.2;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.7;
+
+  /* ── Spacing (4px scale) ── */
+  --space-0:  0;
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* ── Sizing ── */
+  --tap-target:      44px;
+  --tap-target-lg:   60px;
+  --header-height:   60px;
+  --sidebar-width:   240px;
+  --width-content:   720px;
+  --width-app:       1280px;
+  --width-wide:      1600px;
+
+  /* ── Radii (kiosk-aligned) ── */
+  --radius:        14px;
+  --radius-sm:     10px;
+  --radius-md:     10px;          /* alias */
+  --radius-lg:     14px;          /* alias */
+  --radius-xl:     20px;
+  --radius-pill:   9999px;
+
+  /* ── Shadows ── */
+  --shadow:        0 2px 18px rgba(0,0,0,0.45);
+  --shadow-sm:     0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md:     0 4px 12px 0 rgba(0, 0, 0, 0.5);
+  --shadow-lg:     0 12px 40px 0 rgba(0, 0, 0, 0.6);
+  --shadow-glow:   0 0 0 3px var(--accent-glow);
+
+  /* ── Motion ── */
+  --duration-fast:    120ms;
+  --duration-normal:  200ms;
+  --duration-slow:    320ms;
+  --ease-out:         cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out:      cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Z-index ── */
+  --z-sidebar:   90;
+  --z-dropdown:  100;
+  --z-sticky:    200;
+  --z-modal:     300;
+  --z-toast:     400;
+  --z-tooltip:   500;
+  --z-overlay:   1000;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast:   0ms;
+    --duration-normal: 0ms;
+    --duration-slow:   0ms;
+  }
+}
+
+/* ===== RESET ============================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-normal);
+  color: var(--text);
+  background: var(--bg);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  /* Admin context: allow text selection. Kiosk has its own page-level rule. */
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* ===== TYPOGRAPHY ========================================================= */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+h1 { font-size: var(--text-3xl); }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-xl); }
+h4 { font-size: var(--text-lg); }
+h5 { font-size: var(--text-md); }
+h6 { font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); }
+
+p { line-height: var(--leading-relaxed); }
+small { font-size: var(--text-sm); color: var(--text-dim); }
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+a:hover { color: var(--accent-hover); }
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+code, pre, kbd, samp {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+code {
+  background: var(--surface-2);
+  padding: 0.125em 0.375em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-soft);
+}
+pre {
+  background: var(--surface-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-soft);
+  overflow-x: auto;
+  line-height: var(--leading-normal);
+}
+pre code { background: transparent; padding: 0; border: none; }
+
+::selection {
+  background: var(--accent-muted);
+  color: var(--text);
+}
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--bg);
+}
+
+img, video, svg { display: block; max-width: 100%; height: auto; }
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input, select, textarea {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  color: var(--text);
+  width: 100%;
+  min-height: var(--tap-target);
+  transition: border-color var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+}
+input[type="checkbox"], input[type="radio"] {
+  width: auto;
+  min-height: 0;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--shadow-glow);
+}
+input:disabled, select:disabled, textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+textarea {
+  min-height: 120px;
+  resize: vertical;
+  font-family: inherit;
+}
+label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-dim);
+  margin-bottom: var(--space-2);
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+th, td {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-soft);
+}
+th {
+  font-weight: var(--weight-semibold);
+  color: var(--text-dim);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border-soft);
+  margin: var(--space-6) 0;
+}
+
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===== APP SHELL ========================================================== */
+
+.app {
+  display: grid;
+  min-height: 100vh;
+  background: var(--bg);
+  grid-template-rows: var(--header-height) 1fr;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "header"
+    "main";
+}
+
+/* Header */
+.app-header {
+  grid-area: header;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background: rgba(0,0,0,0.85);
+  border-bottom: 1px solid var(--border-soft);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 0 var(--space-4);
+  max-width: 100%;
+  height: var(--header-height);
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.01em;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.header-brand:hover { color: var(--text); }
+.header-brand-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-md);
+  color: #000;
+  flex-shrink: 0;
+}
+.header-site {
+  font-size: var(--text-sm);
+  color: var(--text-dim);
+  font-weight: var(--weight-regular);
+  margin-left: var(--space-2);
+  padding-left: var(--space-3);
+  border-left: 1px solid var(--border);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.header-meta {
+  display: none;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--text-dim);
+}
+.header-meta-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Sidebar toggle button (mobile/touch only) */
+.sidebar-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap-target);
+  height: var(--tap-target);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+.sidebar-toggle:hover { background: var(--bg-hover); }
+
+/* Sidebar */
+.app-sidebar {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-width);
+  background: var(--surface);
+  border-right: 1px solid var(--border-soft);
+  z-index: var(--z-sidebar);
+  overflow-y: auto;
+  overflow-x: hidden;
+  transform: translateX(-100%);
+  transition: transform var(--duration-normal) var(--ease-out);
+  -webkit-overflow-scrolling: touch;
+}
+.app-sidebar.is-open {
+  transform: translateX(0);
+}
+.sidebar-backdrop {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: calc(var(--z-sidebar) - 1);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--duration-normal) var(--ease-out),
+              visibility 0s linear var(--duration-normal);
+}
+.sidebar-backdrop.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--duration-normal) var(--ease-out),
+              visibility 0s linear 0s;
+}
+
+/* Main content */
+.app-main {
+  grid-area: main;
+  min-width: 0;
+  padding: var(--space-4);
+  overflow-x: hidden;
+}
+
+/* ===== SIDEBAR NAVIGATION ================================================= */
+.nav-sidebar {
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.nav-section {
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-1);
+  padding: 0 var(--space-3);
+  font-size: var(--text-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  font-weight: var(--weight-semibold);
+}
+.nav-section:first-child {
+  margin-top: 0;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  transition: background var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out);
+  min-height: var(--tap-target);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.nav-item:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+.nav-item.is-active {
+  background: var(--accent-glow);
+  color: var(--accent);
+}
+.nav-item-icon {
+  font-size: var(--text-lg);
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.nav-item-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nav-item-toggle {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  transition: transform var(--duration-fast) var(--ease-out);
+  flex-shrink: 0;
+}
+.nav-group.is-open > .nav-item .nav-item-toggle {
+  transform: rotate(90deg);
+}
+.nav-children {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: var(--space-3);
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+.nav-group.is-open > .nav-children {
+  display: flex;
+}
+.nav-children .nav-item {
+  font-size: var(--text-sm);
+  padding-left: var(--space-8);
+  min-height: 36px;
+}
+
+.nav-update-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--space-2);
+  background: var(--danger);
+  color: #fff;
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  border-radius: var(--radius-pill);
+  margin-left: auto;
+}
+
+/* ===== TABLET BREAKPOINT (769px+) ========================================= */
+@media (min-width: 769px) {
+  .app-main {
+    padding: var(--space-6);
+  }
+  .header-bar {
+    padding: 0 var(--space-6);
+  }
+  .header-meta {
+    display: flex;
+  }
+}
+
+/* ===== DESKTOP BREAKPOINT (1025px+) ======================================== */
+@media (min-width: 1025px) {
+  .app {
+    grid-template-columns: var(--sidebar-width) 1fr;
+    grid-template-areas:
+      "header header"
+      "sidebar main";
+  }
+  .app-sidebar {
+    position: sticky;
+    grid-area: sidebar;
+    top: var(--header-height);
+    height: calc(100vh - var(--header-height));
+    transform: translateX(0);
+    transition: none;
+  }
+  .sidebar-backdrop {
+    display: none;
+  }
+  .sidebar-toggle {
+    display: none;
+  }
+  .app-main {
+    padding: var(--space-8);
+  }
+}
+
+/* ============================================================================
+   KIOSK COMPONENTS
+   ============================================================================
+   The following components are copied from kiosk.css so they're available
+   to ALL pages in the admin UI, not just the embedded kiosk view.
+
+   Source: kiosk.css (Phase A — kiosk implementation)
+   ============================================================================ */
+
+/* ── Section structure ─────────────────────────────────────────────────────── */
+.section { margin-bottom: 22px; }
+.section:last-child { margin-bottom: 0; }
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 10px;
+  padding-left: 2px;
+  font-family: var(--font-body);
+}
+
+.empty {
+  color: var(--text-faint);
+  text-align: center;
+  padding: 32px 16px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  font-size: 14px;
+}
+
+/* ── Latest Detection card (hero) ─────────────────────────────────────────── */
+.latest-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  min-height: 180px;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+.latest-thumb {
+  flex: 0 0 220px;
+  background: var(--surface-2);
+  position: relative;
+  overflow: hidden;
+}
+.latest-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.thumb-placeholder {
+  width: 100%; height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-faint);
+}
+.latest-body {
+  flex: 1;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+.latest-name {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+}
+.latest-sci {
+  font-size: 14px;
+  font-style: italic;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+.latest-meta {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Stack vertically on phone-width screens */
+@media (max-width: 480px) {
+  .latest-card {
+    flex-direction: column;
+    min-height: 0;
+  }
+  .latest-thumb {
+    flex: 0 0 200px;
+    width: 100%;
+  }
+}
+
+/* ── Chips ─────────────────────────────────────────────────────────────────── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  background: var(--surface-3);
+  color: var(--text);
+}
+.chip-conf { color: var(--accent); }
+
+/* ── Play buttons ─────────────────────────────────────────────────────────── */
+.play-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: var(--surface-3);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease;
+  flex-shrink: 0;
+}
+.play-btn:active { transform: scale(0.94); background: var(--surface-2); }
+.play-btn.playing { background: var(--accent); color: #000; }
+
+.play-btn-lg {
+  width: auto;
+  height: 46px;
+  padding: 0 20px 0 18px;
+  border-radius: 23px;
+  background: var(--text);
+  color: #000;
+  font-weight: 600;
+  font-size: 15px;
+  gap: 6px;
+  margin-top: 10px;
+  align-self: flex-start;
+}
+.play-btn-lg:active { background: var(--text-dim); }
+.play-btn-lg.playing { background: var(--accent); }
+
+.play-btn-md { width: 48px; height: 48px; }
+
+/* ── Stats ─────────────────────────────────────────────────────────────────── */
+.section-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.stat {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 18px 16px;
+  text-align: center;
+}
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.stat-label {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-faint);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ── Recent list ──────────────────────────────────────────────────────────── */
+.recent-list {
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.recent-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-soft);
+  min-height: 64px;
+}
+.recent-item:last-child { border-bottom: none; }
+.recent-thumb {
+  flex: 0 0 56px;
+  height: 56px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.recent-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.recent-body { flex: 1; min-width: 0; }
+.recent-name {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.recent-sub {
+  font-size: 13px;
+  color: var(--text-faint);
+  margin-top: 3px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-variant-numeric: tabular-nums;
+}
+.dot { opacity: 0.5; }
+
+.thumb-placeholder-sm, .thumb-placeholder-md {
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, var(--surface-2), var(--surface-3));
+}
+
+/* ── Spectrogram (Overview preview — full-bleed inside .app-main) ─────────── */
+.section-spectro .section-label {
+  padding-left: 2px;
+}
+.spectro-wrap {
+  background: #000;
+  overflow: hidden;
+  display: block;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+}
+.spectro-wrap img {
+  width: 100%;
+  height: 160px;
+  object-fit: fill;
+  display: block;
+  background: #000;
+}
+
+/* Full spectrogram tab/page */
+.section-spectro-full { margin-bottom: 0; }
+.spectro-full-wrap {
+  background: #000;
+  border-radius: var(--radius);
+  overflow: hidden;
+  padding: 6px;
+  border: 1px solid var(--border-soft);
+}
+.spectro-full-wrap img {
+  width: 100%;
+  min-height: 360px;
+  max-height: 460px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: #000;
+}
+
+/* ── Top species list ─────────────────────────────────────────────────────── */
+.top-list {
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.top-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.top-item:last-child { border-bottom: none; }
+.top-rank {
+  flex: 0 0 28px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+  font-size: 15px;
+}
+.top-thumb {
+  flex: 0 0 52px;
+  height: 52px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.top-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.top-body { flex: 1; min-width: 0; }
+.top-name {
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.top-sub {
+  font-size: 12px;
+  color: var(--text-faint);
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.top-count {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+}
+
+/* ── System status grid ───────────────────────────────────────────────────── */
+.sys-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.sys-item {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sys-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.sys-dot.ok   { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+.sys-dot.warn { background: var(--warn); }
+.sys-dot.err  { background: var(--danger); }
+.sys-icon { font-size: 22px; }
+.sys-name {
+  font-size: 12px;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+.sys-val { font-size: 15px; font-weight: 500; margin-top: 2px; }
+
+/* ── Mic input meter ──────────────────────────────────────────────────────── */
+.sys-mic {
+  margin-top: 10px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+.sys-mic-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.sys-mic-value {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.sys-mic-bar {
+  position: relative;
+  height: 14px;
+  background: var(--surface-2);
+  border-radius: 7px;
+  overflow: hidden;
+}
+.sys-mic-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0;
+  background: linear-gradient(90deg,
+    var(--accent)    0%,
+    var(--accent)   65%,
+    var(--warn)     85%,
+    var(--danger)  100%);
+  border-radius: 7px 0 0 7px;
+  transition: width 400ms cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+.sys-mic-marks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.sys-mic-marks span {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: rgba(255,255,255,0.15);
+}
+.sys-mic-scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--text-faint);
+  letter-spacing: 0.04em;
+}
+
+/* ── Today list ───────────────────────────────────────────────────────────── */
+.today-list {
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.today-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-soft);
+  min-height: 96px;
+}
+.today-item:last-child { border-bottom: none; }
+.today-thumb {
+  flex: 0 0 80px;
+  height: 80px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.today-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.today-body { flex: 1; min-width: 0; }
+.today-name {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.today-sci {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text-dim);
+  margin: 3px 0 8px;
+}
+.today-meta { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* ── Species list ─────────────────────────────────────────────────────────── */
+.species-list {
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.species-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-soft);
+  min-height: 96px;
+}
+.species-item:last-child { border-bottom: none; }
+.species-rank {
+  flex: 0 0 32px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+.species-thumb {
+  flex: 0 0 72px;
+  height: 72px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.species-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.species-body { flex: 1; min-width: 0; }
+.species-name {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.species-sci {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text-dim);
+  margin-top: 3px;
+}
+.species-meta {
+  font-size: 12px;
+  color: var(--text-faint);
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.species-count { text-align: right; flex-shrink: 0; }
+.species-count-num {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.species-count-lbl {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  margin-top: 4px;
+}
+
+/* ── Bird image overlay (lightbox) ────────────────────────────────────────── */
+.thumb-tappable { cursor: pointer; position: relative; }
+.thumb-tappable::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 0 var(--accent);
+  transition: box-shadow 140ms ease;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.thumb-tappable:active::after { box-shadow: inset 0 0 0 2px var(--accent); }
+
+.bird-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+.bird-overlay.open { opacity: 1; pointer-events: auto; }
+
+.bird-overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.bird-overlay-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 86%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  box-sizing: border-box;
+  transform: scale(0.96);
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.3, 1);
+  pointer-events: none;
+}
+.bird-overlay.open .bird-overlay-content { transform: scale(1); }
+
+.bird-overlay-img {
+  max-width: 100%;
+  max-height: 62vh;
+  border-radius: var(--radius);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+  background: var(--surface-2);
+  pointer-events: auto;
+  object-fit: contain;
+}
+
+.bird-overlay-close {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.7);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 2;
+  transition: background 120ms ease;
+}
+.bird-overlay-close:active { background: rgba(255, 255, 255, 0.12); }
+
+.bird-overlay-info {
+  text-align: center;
+  pointer-events: auto;
+  max-width: 640px;
+}
+.bird-overlay-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--text);
+  line-height: 1.15;
+}
+.bird-overlay-sci {
+  font-size: 15px;
+  font-style: italic;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+.bird-overlay-credit {
+  font-size: 12px;
+  color: var(--text-faint);
+  margin-top: 10px;
+  letter-spacing: 0.02em;
+}
+.bird-overlay-credit a {
+  color: var(--text-dim);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.bird-overlay-hint {
+  margin-top: 14px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  opacity: 0.6;
+}
+
+/* ── Fade-in animation for new data ───────────────────────────────────────── */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeSlideIn 280ms ease-out; }
+
+/* ============================================================================
+   OVERVIEW DESKTOP GRID LAYOUT
+   ============================================================================
+   On screens 1025px+, lay out the kiosk's content in a 2-column grid that
+   takes advantage of horizontal space. On narrow screens, fall back to the
+   single-column kiosk layout.
+
+   Strategy: assign each section a grid-area name. The kiosk's existing
+   classes (.section-latest, .section-stats, .section-recent, etc.) are
+   used as grid items.
+   ============================================================================ */
+
+.app-main .content {
+  /* On the kiosk, .content has padding/maxwidth — when embedded, let .app-main
+     drive the padding. */
+  padding: 0;
+  max-width: 100%;
+  margin: 0;
+}
+
+@media (min-width: 1025px) {
+  /* Two-column overview grid. The kiosk wraps content in <main class="content">
+     when standalone; in embedded mode we don't have that wrapper. We grid
+     directly on the content's .section children using a wrapper. */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    align-items: start;
+  }
+  .overview-grid .section { margin-bottom: 0; }
+
+  /* Sections that should span both columns */
+  .overview-grid .section-latest,
+  .overview-grid .section-spectro {
+    grid-column: 1 / -1;
+  }
+
+  /* On wider screens, expand the 3-stat grid to 6 columns
+     (Today, Species, Last Hour, Total, All-Time Species, plus blank) */
+  .section-stats--wide {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* On very wide screens (1400px+), three columns for the bottom area */
+@media (min-width: 1400px) {
+  .overview-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .overview-grid .section-latest,
+  .overview-grid .section-spectro {
+    grid-column: 1 / -1;
+  }
+  .overview-grid .section-stats {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ============================================================================
+   COMMON COMPONENTS (kept from C-2.1 — used by Settings, Tools, etc.)
+   ============================================================================ */
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  min-height: var(--tap-target);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out);
+  white-space: nowrap;
+  user-select: none;
+}
+.btn:active { transform: scale(0.97); }
+.btn:disabled, .btn.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.btn--primary {
+  background: var(--accent);
+  color: #000;
+  font-weight: var(--weight-semibold);
+}
+.btn--primary:hover { background: var(--accent-hover); color: #000; }
+.btn--secondary {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+.btn--secondary:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--text-dim);
+}
+.btn--ghost:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+.btn--danger {
+  background: var(--danger);
+  color: #fff;
+}
+.btn--sm {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-xs);
+  min-height: 32px;
+}
+.btn--lg {
+  padding: var(--space-4) var(--space-6);
+  font-size: var(--text-md);
+  min-height: var(--tap-target-lg);
+}
+.btn--icon {
+  padding: var(--space-3);
+  width: var(--tap-target);
+  height: var(--tap-target);
+}
+.btn--block { width: 100%; }
+
+/* Cards (admin context — different from .latest-card) */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  padding: var(--space-5);
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+.card-title {
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  color: var(--text);
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+.badge--ok     { background: var(--status-ok-bg);   color: var(--status-ok); }
+.badge--warn   { background: var(--status-warn-bg); color: var(--status-warn); }
+.badge--low    { background: var(--status-low-bg);  color: var(--status-low); }
+.badge--info   { background: var(--status-info-bg); color: var(--status-info); }
+.badge--accent { background: var(--accent-glow);    color: var(--accent); }
+
+/* Dropdowns */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  min-width: 240px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-2);
+  z-index: var(--z-dropdown);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out),
+              visibility 0s linear var(--duration-fast);
+  max-height: calc(100vh - var(--header-height) - var(--space-4));
+  overflow-y: auto;
+}
+.dropdown.is-open .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out),
+              visibility 0s linear 0s;
+}
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: var(--text-sm);
+  text-decoration: none;
+  cursor: pointer;
+  min-height: var(--tap-target);
+  transition: background var(--duration-fast) var(--ease-out);
+  width: 100%;
+  border: none;
+  background: none;
+  text-align: left;
+  font-weight: var(--weight-medium);
+}
+.dropdown-item:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+.dropdown-item-icon {
+  font-size: var(--text-md);
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.dropdown-divider {
+  height: 1px;
+  background: var(--border-soft);
+  margin: var(--space-2) 0;
+}
+.dropdown-section {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  font-weight: var(--weight-semibold);
+}
+
+/* Page header */
+.page-header {
+  margin-bottom: var(--space-6);
+}
+.page-header h1 {
+  margin-bottom: var(--space-2);
+}
+.page-header-subtitle {
+  color: var(--text-dim);
+  font-size: var(--text-md);
+}
+
+/* Empty state (admin context) */
+.empty-state {
+  text-align: center;
+  padding: var(--space-12) var(--space-4);
+  color: var(--text-dim);
+}
+.empty-state-icon {
+  font-size: var(--text-4xl);
+  margin-bottom: var(--space-4);
+  opacity: 0.5;
+}
+.empty-state h3 {
+  margin-bottom: var(--space-2);
+}
+
+/* ============================================================================
+   LEGACY COMPATIBILITY LAYER
+   ============================================================================ */
+
+/* Restyle legacy tables */
+.app-main table:not(.no-legacy):not(#speciesTable) {
+  background: transparent;
+  box-shadow: none;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.app-main table:not(.no-legacy):not(#speciesTable) td {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  color: var(--text);
+  font-weight: var(--weight-regular);
+  vertical-align: middle;
+}
+.app-main table:not(.no-legacy):not(#speciesTable) th {
+  background: var(--surface-2);
+  color: var(--text-dim);
+}
+
+/* Legacy buttons */
+.app-main button:not(.btn):not(.nav-item):not(.dropdown-item):not(.sidebar-toggle):not(.sortbutton):not(.legacyview):not(.loadmore):not(.play-btn):not(.play-btn-lg):not(.play-btn-md):not([class*="copyimage"]):not(.bird-overlay-close) {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out);
+  min-height: var(--tap-target);
+}
+.app-main button:not(.btn):not(.nav-item):not(.dropdown-item):not(.sidebar-toggle):not(.sortbutton):not(.legacyview):not(.loadmore):not(.play-btn):not(.play-btn-lg):not(.play-btn-md):not([class*="copyimage"]):not(.bird-overlay-close):hover {
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+/* Legacy banner (page titles) */
+.brbanner {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  padding: var(--space-5);
+  text-align: center;
+  margin-bottom: var(--space-5);
+}
+.brbanner h1 {
+  margin: 0;
+  font-size: var(--text-2xl);
+  color: var(--text);
+}
+
+/* Legacy settings tables */
+.settingstable {
+  background: var(--surface) !important;
+  border: 1px solid var(--border-soft) !important;
+  border-radius: var(--radius) !important;
+  padding: var(--space-5) !important;
+  margin: var(--space-4) 0 !important;
+  box-shadow: none !important;
+}
+.settingstable td {
+  background: transparent !important;
+  border: none !important;
+  padding: var(--space-2) 0 !important;
+}
+.settingstable h2 {
+  font-size: var(--text-xl);
+  color: var(--text);
+  margin-bottom: var(--space-3);
+}
+.settingstable input[type="text"],
+.settingstable input[type="number"],
+.settingstable input[type="email"],
+.settingstable input[type="url"],
+.settingstable input[type="password"],
+.settingstable select,
+.settingstable textarea {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.settingstable label {
+  color: var(--text-dim);
+  font-weight: var(--weight-medium);
+}
+
+/* Legacy iframe */
+.app-main > iframe,
+.app-main iframe {
+  width: 100%;
+  height: calc(100vh - var(--header-height) - 80px);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+/* Legacy slider */
+.slider {
+  -webkit-appearance: none;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  outline: none;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid var(--bg);
+}
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid var(--bg);
+}
+
+/* Legacy update number badge */
+.updatenumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--space-2);
+  background: var(--danger);
+  color: #fff;
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  border-radius: var(--radius-pill);
+  margin-left: var(--space-1);
+}
+
+/* Legacy bash output */
+pre.bash {
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+}
+
+/* Hide legacy chrome (replaced by our header/sidebar) */
+.banner, .topnav, .logo {
+  display: none !important;
+}
+
+/* ============================================================================
+   UTILITIES
+   ============================================================================ */
+.container        { max-width: var(--width-content); margin: 0 auto; width: 100%; }
+.container-wide   { max-width: var(--width-app);     margin: 0 auto; width: 100%; }
+.container-full   { max-width: var(--width-wide);    margin: 0 auto; width: 100%; }
+
+.stack    { display: flex; flex-direction: column; gap: var(--space-4); }
+.stack-sm { display: flex; flex-direction: column; gap: var(--space-2); }
+.stack-lg { display: flex; flex-direction: column; gap: var(--space-6); }
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.text-center  { text-align: center; }
+.text-right   { text-align: right; }
+.hide         { display: none !important; }
+/* ============================================================================
+   Phase C-2.2.1 additions — append to perchpi.css
+   ============================================================================
+   Adds .header-weather component styling for the weather widget in the
+   admin header.
+   ============================================================================ */
+
+.header-weather {
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-dim);
+  white-space: nowrap;
+  padding-right: var(--space-3);
+  border-right: 1px solid var(--border);
+}
+.header-weather .weather-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+.header-weather .weather-temp {
+  color: var(--text);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+.header-weather .weather-meta {
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+}
+
+@media (min-width: 769px) {
+  .header-weather {
+    display: flex;
+  }
+}
+
+/* On narrow screens (<769px), hide the weather meta text but keep icon + temp */
+@media (max-width: 600px) {
+  .header-weather .weather-meta {
+    display: none;
+  }
+}
+/* ============================================================================
+   Phase C-2.2.3 additions — append to perchpi.css
+   ============================================================================
+   - Clickable stat tiles (Today / Species / Last Hour) with hover/press
+   - Back-nav header + back link
+   - Recent Detections collapse badge (+N) and inline expand animation
+   - Species row interaction zones (Birds Today)
+   - Bucket toggle (Species Detail) — collapsible sections
+   - Hero card on Species Detail
+   ============================================================================ */
+
+/* ── Clickable stat tiles ─────────────────────────────────────────────────── */
+.pp-stat-clickable {
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out);
+  border: 1px solid transparent;
+  position: relative;
+}
+.pp-stat-clickable:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-muted);
+  box-shadow: 0 0 0 1px var(--accent-muted), 0 4px 16px rgba(74, 222, 128, 0.06);
+}
+.pp-stat-clickable:active {
+  transform: scale(0.98);
+}
+.pp-stat-clickable:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.pp-stat-clickable::after {
+  content: "›";
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: var(--text-faint);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+}
+.pp-stat-clickable:hover::after {
+  opacity: 1;
+}
+
+/* ── Back-nav header ──────────────────────────────────────────────────────── */
+.pp-back-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border-soft);
+}
+.pp-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-dim);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  transition: background var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out);
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-height: var(--tap-target);
+}
+.pp-back-link:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+.pp-back-link svg {
+  flex-shrink: 0;
+}
+.pp-back-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+.pp-back-title {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-semibold);
+  color: var(--text);
+  margin: 0;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pp-back-subtitle {
+  font-size: var(--text-sm);
+  color: var(--text-dim);
+  font-style: italic;
+}
+@media (max-width: 600px) {
+  .pp-back-link span {
+    display: none; /* icon only on narrow */
+  }
+  .pp-back-title {
+    font-size: var(--text-xl);
+  }
+}
+
+/* ── Recent Detections collapse: badge + expand animation ────────────────── */
+.pp-collapse-leader {
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+  position: relative;
+}
+.pp-collapse-leader:hover {
+  background: var(--bg-hover);
+}
+.pp-collapse-leader::before {
+  /* Subtle vertical accent bar on the left to indicate "this is a group" */
+  content: "";
+  position: absolute;
+  left: 0; top: 8px; bottom: 8px;
+  width: 3px;
+  background: var(--accent);
+  opacity: 0.6;
+  border-radius: 0 2px 2px 0;
+}
+.pp-collapse-leader.pp-expanded::before {
+  opacity: 1;
+}
+.pp-collapse-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: var(--space-2);
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  background: var(--accent-glow);
+  color: var(--accent);
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.02em;
+}
+
+/* The collapsed-extra rows are present in DOM but hidden until expanded */
+.pp-collapsed-extra {
+  display: flex; /* keep flex layout from .recent-item */
+  overflow: hidden;
+  transition: max-height var(--duration-normal) var(--ease-out),
+              opacity   var(--duration-fast)   var(--ease-out),
+              padding-top    var(--duration-normal) var(--ease-out),
+              padding-bottom var(--duration-normal) var(--ease-out),
+              border-bottom-width var(--duration-fast) var(--ease-out);
+}
+.pp-collapsed-extra.pp-collapsed-hidden {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-bottom-width: 0;
+  pointer-events: none;
+  /* Override min-height from .recent-item (64px) when hidden */
+  min-height: 0;
+}
+.pp-collapsed-extra.pp-collapsed-shown {
+  max-height: 80px;
+  opacity: 1;
+  /* Subtle indent so it's visually a child of the leader */
+  background: var(--surface-2);
+  animation: ppCollapseExpand var(--duration-normal) var(--ease-out);
+}
+.pp-collapsed-extra.pp-collapsed-shown .recent-thumb {
+  /* Dim the duplicate thumbnails since they're the same species */
+  opacity: 0.7;
+}
+@keyframes ppCollapseExpand {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Visual chevron on collapsed leader */
+.pp-collapse-leader > .recent-body::after {
+  content: "▸";
+  display: inline-block;
+  margin-left: var(--space-2);
+  font-size: 11px;
+  color: var(--text-faint);
+  transition: transform var(--duration-fast) var(--ease-out);
+  vertical-align: middle;
+}
+.pp-collapse-leader.pp-expanded > .recent-body::after {
+  transform: rotate(90deg);
+}
+
+/* ── Species row interaction zones (Birds Today) ──────────────────────────── */
+.pp-species-row {
+  position: relative;
+}
+.pp-species-body {
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+.pp-species-body:hover .species-name {
+  color: var(--accent);
+}
+.pp-species-body:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  border-radius: var(--radius-sm);
+}
+.pp-species-row .pp-species-play {
+  margin-left: var(--space-2);
+}
+
+/* ── Species Detail hero ─────────────────────────────────────────────────── */
+.pp-species-hero .latest-thumb {
+  flex: 0 0 200px;
+}
+@media (max-width: 600px) {
+  .pp-species-hero .latest-thumb {
+    flex: 0 0 180px;
+    width: 100%;
+  }
+}
+
+/* ── Bucket sections (Species Detail) ─────────────────────────────────────── */
+.pp-bucket {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: var(--space-4);
+}
+.pp-bucket-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+  border-bottom: 1px solid var(--border-soft);
+  user-select: none;
+  -webkit-user-select: none;
+  min-height: var(--tap-target-lg);
+}
+.pp-bucket-header:hover {
+  background: var(--bg-hover);
+}
+.pp-bucket-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.pp-bucket-toggle {
+  font-size: 12px;
+  color: var(--text-faint);
+  transition: transform var(--duration-fast) var(--ease-out);
+  flex-shrink: 0;
+}
+.pp-bucket-collapsed .pp-bucket-toggle {
+  transform: rotate(-90deg);
+}
+.pp-bucket-label {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.pp-bucket-time {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: var(--weight-medium);
+}
+.pp-bucket-count {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+.pp-bucket-body {
+  /* Body is the contents (today-list or empty). Border on header above
+     handles the divider; no extra padding here so today-list sits flush. */
+}
+.pp-bucket-body .today-list {
+  border-radius: 0;
+  background: transparent;
+}
+.pp-bucket-body .today-item {
+  border-bottom: 1px solid var(--border-soft);
+}
+.pp-bucket-body .today-item:last-child {
+  border-bottom: none;
+}
+.pp-bucket-empty {
+  background: transparent;
+  padding: var(--space-6) var(--space-4);
+  font-style: italic;
+  font-size: var(--text-sm);
+}
+.pp-bucket-collapsed .pp-bucket-body {
+  display: none;
+}
+.pp-bucket-collapsed .pp-bucket-header {
+  border-bottom: none;
+}
+
+/* When the section is the first of its kind (current period), give it a
+   subtle accent border to indicate "you are here" temporally. */
+.pp-bucket:first-of-type {
+  border-color: var(--accent-muted);
+  box-shadow: 0 0 0 1px var(--accent-muted);
+}
+.pp-bucket:first-of-type .pp-bucket-label {
+  color: var(--accent);
+}
+/* ============================================================================
+   Phase C-2.2.3 — Fix patch (append to perchpi.css)
+   ============================================================================
+   - Larger, more visible back-link button (accent color, prominent)
+   - Spectrogram view stretched edge-to-edge within main content
+   ============================================================================ */
+
+/* ── Bigger, more visible back link ─────────────────────────────────────── */
+.pp-back-link {
+  /* Override the muted default — make it look like a real CTA */
+  background: var(--accent);
+  color: var(--bg) !important; /* dark text on green for high contrast */
+  border-color: var(--accent);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  padding: var(--space-3) var(--space-4);
+  min-height: 44px;
+  box-shadow: 0 2px 8px rgba(74, 222, 128, 0.25);
+}
+.pp-back-link svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2.5;
+}
+.pp-back-link:hover {
+  background: var(--accent-bright, #6ee896);
+  color: var(--bg) !important;
+  border-color: var(--accent-bright, #6ee896);
+  box-shadow: 0 4px 14px rgba(74, 222, 128, 0.4);
+  transform: translateY(-1px);
+}
+.pp-back-link:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(74, 222, 128, 0.3);
+}
+.pp-back-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* On narrow screens, keep the label visible (override the previous hide rule) */
+@media (max-width: 600px) {
+  .pp-back-link span {
+    display: inline; /* unhide */
+  }
+  .pp-back-link {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+  }
+}
+
+/* ── Spectrogram view: edge-to-edge ──────────────────────────────────────── */
+/* The kiosk's spectrogram embeds a wide image; constrain less in our shell. */
+body.pp-on-spectrogram .app-main,
+body[data-view="spectrogram"] .app-main {
+  padding-left: 0;
+  padding-right: 0;
+  max-width: none;
+}
+/* Section/img/iframe inside spectrogram view stretch full width */
+.pp-spectrogram-full,
+.pp-spectrogram-full .section,
+.pp-spectrogram-full > section {
+  max-width: none;
+  width: 100%;
+  padding-left: var(--space-2);
+  padding-right: var(--space-2);
+}
+.pp-spectrogram-full img,
+.pp-spectrogram-full iframe,
+.pp-spectrogram-full .spectrogram-img,
+.pp-spectrogram-full canvas {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto;
+  display: block;
+}
+/* Catch the kiosk's likely class names too */
+.pp-spectrogram-full .spectrogram,
+.pp-spectrogram-full .spectrogram-wrap,
+.pp-spectrogram-full .live-spectrogram {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+/* ============================================================================
+   Phase C-2.2.4 additions — append to perchpi.css
+   ============================================================================
+   - Clickable sys-item (All-Time Species tile) hover/press
+   - Sort toggle button group (segmented control style)
+   ============================================================================ */
+
+/* ── Clickable sys-item (All-Time Species) ─────────────────────────────── */
+.pp-sys-clickable {
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out),
+              border var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+  border: 1px solid transparent;
+  position: relative;
+}
+.pp-sys-clickable:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-muted);
+  box-shadow: 0 0 0 1px var(--accent-muted), 0 4px 16px rgba(74, 222, 128, 0.06);
+}
+.pp-sys-clickable:active {
+  transform: scale(0.98);
+}
+.pp-sys-clickable:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.pp-sys-clickable::after {
+  content: "›";
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: var(--text-faint);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+}
+.pp-sys-clickable:hover::after {
+  opacity: 1;
+}
+
+/* ── Sort toggle (segmented control) ──────────────────────────────────── */
+.pp-sort-toggle {
+  display: inline-flex;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  padding: 4px;
+  gap: 2px;
+  margin-bottom: var(--space-5);
+  flex-wrap: wrap;
+}
+.pp-sort-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  min-height: 36px;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-dim);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: background var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out);
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.pp-sort-toggle-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+.pp-sort-toggle-btn.is-active {
+  background: var(--accent);
+  color: #000;
+  font-weight: var(--weight-semibold);
+}
+.pp-sort-toggle-btn.is-active:hover {
+  background: var(--accent-hover);
+  color: #000;
+}
+.pp-sort-toggle-btn.pp-sort-pressing {
+  transform: scale(0.96);
+}
+
+@media (max-width: 600px) {
+  .pp-sort-toggle {
+    width: 100%;
+  }
+  .pp-sort-toggle-btn {
+    flex: 1;
+    padding: var(--space-2) var(--space-2);
+    font-size: var(--text-xs);
+  }
+}
+/* ============================================================================
+   Phase C-2.2.5 — Combined CSS (append to perchpi.css)
+   ============================================================================
+   - Ensures injected sys-icons render at the right size
+   - Reasserts pp-sys-clickable hover (in case ordering ate it after restore)
+   ============================================================================ */
+
+/* Injected icons — match the kiosk's existing .sys-icon size */
+.sys-item .sys-icon.pp-injected-icon,
+.sys-item .pp-injected-icon {
+  font-size: 22px;
+  line-height: 1;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+}
+
+/* Reassert clickable sys-item hover — kept here for safety after the restore */
+.pp-sys-clickable {
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out),
+              border var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+  border: 1px solid transparent;
+  position: relative;
+}
+.pp-sys-clickable:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-muted);
+  box-shadow: 0 0 0 1px var(--accent-muted), 0 4px 16px rgba(74, 222, 128, 0.06);
+}
+.pp-sys-clickable:active {
+  transform: scale(0.98);
+}
+.pp-sys-clickable:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.pp-sys-clickable::after {
+  content: "›";
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: var(--text-faint);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+}
+.pp-sys-clickable:hover::after {
+  opacity: 1;
+}
+
+/* Sort toggle — also reassert in case it got lost */
+.pp-sort-toggle {
+  display: inline-flex;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  padding: 4px;
+  gap: 2px;
+  margin-bottom: var(--space-5);
+  flex-wrap: wrap;
+}
+.pp-sort-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  min-height: 36px;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-dim);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: background var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out);
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.pp-sort-toggle-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+.pp-sort-toggle-btn.is-active {
+  background: var(--accent);
+  color: #000;
+  font-weight: var(--weight-semibold);
+}
+.pp-sort-toggle-btn.is-active:hover {
+  background: var(--accent-hover);
+  color: #000;
+}
+/* ============================================================================
+   Best Recordings page — list rows
+   ============================================================================ */
+.best-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.best-item {
+  display: grid;
+  grid-template-columns: 64px 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.best-item:hover {
+  background: var(--surface-3);
+  border-color: var(--border-strong);
+}
+
+.best-thumb {
+  display: block;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--surface-1);
+}
+.best-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.best-thumb .thumb-placeholder-md {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--surface-3), var(--surface-1));
+}
+
+.best-body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.best-name {
+  display: block;                /* perchpi:bestname-block-v1 — full-width hover target when rendered as <a> */
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-1);
+  text-decoration: none;         /* kill default <a> underline */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+a.best-name:hover { color: var(--accent-hover); }  /* perchpi:bestname-greenhover-v1 — green text on hover signals clickability */
+
+.best-sci {
+  font-style: italic;
+  font-size: 13px;
+  color: var(--text-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.best-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.best-meta .chip {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  color: var(--text-2);
+  border: 1px solid var(--border-soft);
+}
+
+.best-meta .chip-conf {
+  background: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+  border-color: rgba(34, 197, 94, 0.25);
+}
+
+.best-meta .chip-date {
+  background: var(--surface-3);
+  color: var(--text-3);
+}
+
+.best-meta .chip-xc {
+  background: rgba(255, 193, 7, 0.10);
+  color: #fbbf24;
+  border-color: rgba(255, 193, 7, 0.25);
+  font-weight: 500;
+}
+
+.best-meta .chip-xc-id {
+  background: rgba(255, 193, 7, 0.06);
+  color: var(--text-3);
+  border-color: rgba(255, 193, 7, 0.15);
+}
+
+.best-spec {
+  width: 140px;
+  height: 56px;
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--surface-1);
+}
+.best-spec img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .best-item {
+    grid-template-columns: 56px 1fr auto;
+    gap: 12px;
+    padding: 8px 12px;
+  }
+  .best-thumb {
+    width: 56px;
+    height: 56px;
+  }
+  .best-spec {
+    display: none;  /* hide spectrogram thumb on narrow screens to save space */
+  }
+}
+
+/* === Species Profile additions (appended 20260429-042745) === */
+/* ============================================================================
+   species_profile.css — Species Profile page styles (C-2.4 batch 2)
+   Append to perchpi.css
+   ============================================================================ */
+
+/* Section title (reusable) */
+.pp-section-title {
+  font-size: 1.05rem;
+  font-weight: 600;  /* perchpi:hig-section-title-weight-v1 — was 700, HIG SF Pro <24pt prefers 600 */
+  margin: 0 0 0.75rem 0;
+  color: var(--color-text-primary, #f4f4f4);
+  letter-spacing: 0.01em;
+}
+
+/* About-this-bird section */
+.pp-profile-about {
+  background: var(--color-card-bg, #1c1c1e);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+}
+
+.pp-facts-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 1rem 0;
+}
+
+.pp-fact-chip {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--color-text-secondary, #c8c8c8);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  font-size: 0.82rem;
+  padding: 0.32rem 0.7rem;
+}
+
+.pp-fact-chip em {
+  font-style: italic;
+  color: var(--color-text-primary, #f4f4f4);
+  margin-left: 0.2rem;
+}
+
+.pp-fact-conservation-good {
+  background: rgba(76, 175, 80, 0.16);
+  border-color: rgba(76, 175, 80, 0.32);
+  color: #a5d6a7;
+}
+
+.pp-fact-conservation-warn {
+  background: rgba(255, 167, 38, 0.16);
+  border-color: rgba(255, 167, 38, 0.32);
+  color: #ffcc80;
+}
+
+.pp-fact-conservation-bad {
+  background: rgba(229, 57, 53, 0.16);
+  border-color: rgba(229, 57, 53, 0.32);
+  color: #ef9a9a;
+}
+
+.pp-profile-extract {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--color-text-primary, #f4f4f4);
+  margin: 0;
+}
+
+.pp-profile-missing {
+  color: var(--color-text-secondary, #888);
+  font-style: italic;
+}
+
+.pp-profile-attribution {
+  font-size: 0.78rem;
+  color: var(--color-text-secondary, #888);
+  margin: 0.85rem 0 0 0;
+  letter-spacing: 0.01em;
+}
+
+.pp-profile-attribution a {
+  color: var(--color-accent, #4ade80);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.pp-profile-attribution a:hover {
+  color: var(--color-accent-hover, #6ee599);
+}
+
+/* Your observations section */
+.pp-profile-stats {
+  background: var(--color-card-bg, #1c1c1e);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+}
+
+.pp-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.pp-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.5rem 0;
+}
+
+.pp-stat-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #f4f4f4);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.pp-stat-label {
+  font-size: 0.78rem;
+  color: var(--color-text-secondary, #888);
+  letter-spacing: 0.02em;
+}
+
+/* Learn more button section */
+.pp-profile-learn-more {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.55rem;
+  padding: 0.5rem 0 1rem 0;
+}
+
+.pp-cornell-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  padding: 0.85rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.pp-cornell-note {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--color-text-secondary, #888);
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+/* ── Recordings by date (C-2.4 batch 3) ────────────────────────────────── */
+.recordings-date-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.recordings-date-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: inherit;
+  min-height: 64px;
+  transition: background 120ms ease, border-color 120ms ease, transform 80ms ease;
+}
+.recordings-date-card:hover {
+  background: var(--bg-hover, var(--surface-2));
+  border-color: var(--border, var(--border-soft));
+}
+.recordings-date-card:active {
+  transform: scale(0.997);
+}
+.recordings-date-label {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.recordings-date-meta {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+/* perchpi:batch3-2c:detection-list */
+/* ── Per-date+species detection log (Recordings deepest level) ──────────── */
+.detection-list {
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.detection-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-soft);
+  min-height: 80px;
+}
+.detection-item:last-child { border-bottom: none; }
+.detection-time {
+  flex: 0 0 56px;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.detection-conf {
+  flex: 0 0 52px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  font-variant-numeric: tabular-nums;
+}
+.detection-spec {
+  flex: 1;
+  position: relative;
+  height: 64px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface-2);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: block;
+  -webkit-tap-highlight-color: transparent;
+}
+.detection-spec img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+.detection-spec.detection-spec-missing {
+  background: var(--surface-2) repeating-linear-gradient(
+    45deg,
+    transparent 0,
+    transparent 8px,
+    rgba(255,255,255,0.03) 8px,
+    rgba(255,255,255,0.03) 16px
+  );
+}
+.detection-spec-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.0);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 140ms ease, background 140ms ease;
+  pointer-events: none;
+}
+.detection-spec:hover .detection-spec-overlay,
+.detection-spec:focus-visible .detection-spec-overlay,
+.detection-item.is-playing .detection-spec-overlay {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.35);
+}
+.detection-spec:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.detection-spec-pause { display: none; }
+.detection-item.is-playing .detection-spec-play  { display: none; }
+.detection-item.is-playing .detection-spec-pause { display: inline-block; }
+.detection-item.is-playing .detection-spec {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+@media (max-width: 480px) {
+  .detection-item { gap: 10px; padding: 10px 12px; min-height: 72px; }
+  .detection-time { flex: 0 0 48px; font-size: 15px; }
+  .detection-conf { flex: 0 0 46px; font-size: 12px; padding: 3px 6px; }
+  .detection-spec { height: 56px; }
+}
+
+/* perchpi:clickable-stats */
+/* Stat tiles on Overview are clickable links to drill-down pages. */
+a.stat.stat-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  display: block;
+  transition: background var(--duration-fast, 120ms) var(--ease-out, ease);
+}
+a.stat.stat-link:hover {
+  background: var(--surface-2);
+}
+a.stat.stat-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* perchpi:species-stats-styles */
+/* Species Stats — callsign explorer page */
+
+.pp-ss-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 8px);
+}
+
+.pp-ss-row {
+  display: grid;
+  grid-template-columns: 64px 1fr 180px;
+  gap: var(--space-3, 12px);
+  align-items: center;
+  padding: var(--space-3, 12px);
+  background: var(--pp-surface, #1a1a1a);
+  border: 1px solid var(--pp-border, #2a2a2a);
+  border-radius: var(--radius-lg, 12px);
+  transition: border-color 0.15s ease;
+}
+.pp-ss-row:hover { border-color: var(--pp-accent, #4ade80); }
+
+.pp-ss-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-md, 8px);
+  overflow: hidden;
+  background: var(--pp-bg, #0a0a0a);
+  flex-shrink: 0;
+}
+.pp-ss-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.pp-ss-thumb-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--pp-text-muted, #888);
+  font-size: 1.5em;
+}
+
+.pp-ss-center {
+  min-width: 0;  /* allow truncation */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 8px);
+}
+.pp-ss-name {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2, 8px);
+  flex-wrap: wrap;
+}
+.pp-ss-name-com {
+  font-weight: 600;
+  color: var(--pp-text, #e6e6e6);
+  text-decoration: none;
+}
+.pp-ss-name-com:hover { color: var(--pp-accent, #4ade80); text-decoration: underline; }
+.pp-ss-name-sci {
+  font-style: italic;
+  font-size: 0.85em;
+  color: var(--pp-text-muted, #888);
+}
+
+.pp-ss-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.pp-ss-meta-count {
+  font-size: 1.4em;
+  font-weight: 700;
+  color: var(--pp-accent, #4ade80);
+}
+.pp-ss-meta-label {
+  font-size: 0.75em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--pp-text-muted, #888);
+}
+.pp-ss-meta-sub {
+  font-size: 0.8em;
+  color: var(--pp-text-muted, #888);
+}
+
+/* Sort buttons row */
+.pp-ss-sort {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2, 8px);
+  margin-bottom: var(--space-3, 12px);
+}
+.pp-ss-sort a {
+  padding: 6px 14px;
+  background: var(--pp-surface, #1a1a1a);
+  border: 1px solid var(--pp-border, #2a2a2a);
+  border-radius: 999px;
+  color: var(--pp-text-muted, #888);
+  text-decoration: none;
+  font-size: 0.85em;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+.pp-ss-sort a:hover {
+  color: var(--pp-text, #e6e6e6);
+  border-color: var(--pp-accent, #4ade80);
+}
+.pp-ss-sort a.active {
+  background: var(--pp-accent, #4ade80);
+  color: var(--pp-bg, #0a0a0a);
+  border-color: var(--pp-accent, #4ade80);
+}
+
+.pp-ss-empty {
+  text-align: center;
+  padding: var(--space-5, 24px);
+  color: var(--pp-text-muted, #888);
+  font-style: italic;
+}
+
+/* Stack on narrow screens (e.g., 7" Pi display in portrait) */
+@media (max-width: 700px) {
+  .pp-ss-row {
+    grid-template-columns: 48px 1fr;
+    grid-template-rows: auto auto;
+  }
+  .pp-ss-thumb {
+    width: 48px;
+    height: 48px;
+    grid-row: 1;
+  }
+  .pp-ss-center {
+    grid-row: 1;
+    grid-column: 2;
+  }
+  .pp-ss-meta {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+}
+
+/* ---- Scrubber component (reusable) ---- */
+.pp-scrubber {
+  position: relative;
+  width: 100%;
+  height: 80px  /* perchpi:scrubber-height-tuning-v1 — was 56px, bumped to close aspect gap */;
+  background: var(--pp-bg, #0a0a0a);
+  border-radius: var(--radius-md, 8px);
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+.pp-scrubber-spec {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+.pp-scrubber.pp-scrubber-no-spec {
+  background: linear-gradient(90deg, rgba(74,222,128,0.10), rgba(74,222,128,0.03));
+}
+.pp-scrubber-cursor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(74, 222, 128, 0.85);
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.6);
+  pointer-events: none;
+  transition: left 0.05s linear;
+}
+.pp-scrubber-time {
+  position: absolute;
+  bottom: 4px;
+  right: 6px;
+  font-size: 0.75em;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.55);
+  padding: 1px 6px;
+  border-radius: 4px;
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+.pp-scrubber-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--pp-text-muted, #666);
+  font-size: 0.85em;
+  font-style: italic;
+}
+.pp-scrubber.pp-scrubber-playing {
+  outline: 1px solid rgba(74, 222, 128, 0.4);
+}
+
+/* On narrow screens, scrubber strip becomes its own row */
+@media (max-width: 700px) {
+  .pp-scrubber { height: 48px; }
+}
+
+/* ============================================================================
+   Spectrogram CSS hardening — added 2026-05-01
+   ============================================================================
+   Locks aspect ratio of the live spectrogram image so a malformed source PNG
+   (e.g. sox producing unexpectedly narrow output) can't smear the kiosk view.
+   The Overview page uses #spectro-preview; the full Spectrogram tab uses
+   #spectro-full. Both need the same treatment.
+   ============================================================================ */
+
+#spectro-preview,
+#spectro-full {
+  width: 100%;
+  height: auto;
+  display: block;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.spectro-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ============================================================================
+   Geomodel + Phenology CSS  (perchpi:geomodel-css-migrated-to-perchpi-css)
+   Migrated from pp_geomodel_inject_css() in perchpi_helpers.php on 2026-05-06.
+   Inline injection caused HTML parser issues when <style> was emitted mid-DOM.
+   ============================================================================ */
+
+.pp-chip-geomodel{display:inline-block;padding:2px 9px;border-radius:9999px;font-size:.72rem;font-weight:600;line-height:1.5;letter-spacing:.01em;vertical-align:middle;margin-left:.5em;cursor:help;white-space:nowrap}
+.pp-chip-uncommon{background:rgba(245,158,11,.16);color:#fbbf24}
+.pp-chip-rare{background:rgba(239,68,68,.18);color:#f87171}
+
+/* Phenology card frame */
+.pp-pheno-card{padding:18px 20px}
+.pp-pheno-card-header{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.pp-pheno-card-title{margin:0;font-size:1.25rem;font-weight:600}
+.pp-pheno-card-sub{color:#9ca3af;font-size:1rem;margin:0 0 18px 0;line-height:1.55}
+
+/* SVG curve */
+.pp-pheno-svg{width:100%;height:auto;display:block}
+.pp-pheno-detection-overlay{fill:rgba(148,163,184,0.18);stroke:none}
+.pp-pheno-area{fill:rgba(34,197,94,.16);stroke:none}
+.pp-pheno-line{fill:none;stroke:#22c55e;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.pp-pheno-band-uncommon{fill:rgba(245,158,11,.10)}
+.pp-pheno-band-rare{fill:rgba(239,68,68,.12)}
+.pp-pheno-threshold{stroke:rgba(255,255,255,.18);stroke-width:1;stroke-dasharray:2 4}
+.pp-pheno-today{stroke:rgba(255,255,255,.45);stroke-width:1;stroke-dasharray:3 3}
+.pp-pheno-today-dot{fill:#22c55e;stroke:#0a0a0a;stroke-width:2;r:5}
+.pp-pheno-today-label{fill:#f9fafb;font-size:12px;font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;font-weight:600;letter-spacing:.02em;dominant-baseline:middle}
+.pp-pheno-today-label-bg{fill:rgba(15,23,42,0.92);stroke:rgba(34,197,94,0.6);stroke-width:1}
+.pp-pheno-axis{stroke:rgba(255,255,255,.16);stroke-width:1}
+.pp-pheno-tick{stroke:rgba(255,255,255,.16);stroke-width:1}
+.pp-pheno-axis-label{fill:#cbd5e1;font-size:13px;font-weight:500;font-family:ui-sans-serif,system-ui,-apple-system,sans-serif}
+
+/* End geomodel CSS */
+
+/* perchpi:user-photo-border-v1 — soft amber 4px frame on personal photos.
+   CSS attribute selector matches any <img> served as .user.jpg.
+   Works on every surface (hero, latest detection, recent list, top species,
+   birds today, species stats) without any PHP-side changes. */
+img[src$=".user.jpg"] {
+  border: 4px solid #f59e0b !important;  /* amber-500 */
+  box-sizing: border-box !important;
+}
+
+/* ==========================================================================
+   perchpi:user-photo-widget-css-v1
+   Wave 3.2 — personal photo upload UI
+   ========================================================================== */
+
+/* Amber 4px border on hero when user-uploaded photo is in use */
+.latest-thumb.is-user-photo img {
+  border: 4px solid #f59e0b;
+  box-sizing: border-box;
+  border-radius: var(--radius-md, 8px);
+}
+
+/* Wrapper sits inline-block, centered below the hero */
+.pp-userphoto {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--space-2, 8px);
+  margin-top: var(--space-3, 12px);
+  margin-bottom: var(--space-2, 8px);
+  font-family: inherit;
+  position: relative;
+}
+
+/* Visibility: state-A hides menu, state-B hides add button */
+.pp-userphoto[data-is-user-photo="0"] .pp-userphoto-menu-wrap { display: none; }
+.pp-userphoto[data-is-user-photo="1"] .pp-userphoto-add        { display: none; }
+
+/* Buttons share a common base style */
+.pp-userphoto-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft, #3a3a3a);
+  background: var(--surface-2, #2a2a2a);
+  color: var(--text, #eee);
+  font-size: 0.9em;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+.pp-userphoto-btn:hover:not(:disabled) {
+  background: var(--surface-hover, #353535);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+.pp-userphoto-btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.pp-userphoto-icon { font-size: 1.05em; line-height: 1; }
+.pp-userphoto-caret { font-size: 0.85em; opacity: 0.7; }
+
+/* Dropdown menu */
+.pp-userphoto-menu-wrap { position: relative; display: inline-block; }
+.pp-userphoto-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 20;
+  min-width: 180px;
+  background: var(--surface-2, #2a2a2a);
+  border: 1px solid var(--border-soft, #3a3a3a);
+  border-radius: var(--radius-sm, 4px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+}
+.pp-userphoto-menu-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 14px;
+  background: transparent;
+  border: none;
+  color: var(--text, #eee);
+  font-size: 0.9em;
+  font-family: inherit;
+  cursor: pointer;
+}
+.pp-userphoto-menu-item:hover { background: rgba(255,255,255,0.05); }
+.pp-userphoto-menu-item--danger { color: #f88; }
+.pp-userphoto-menu-item--danger:hover { background: rgba(255,100,100,0.08); }
+
+/* Spinner — pure CSS, 16px */
+.pp-userphoto-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(245, 158, 11, 0.25);
+  border-top-color: #f59e0b;
+  border-radius: 50%;
+  animation: pp-userphoto-spin 0.7s linear infinite;
+  vertical-align: middle;
+}
+@keyframes pp-userphoto-spin { to { transform: rotate(360deg); } }
+
+/* Modal */
+.pp-userphoto-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pp-userphoto-modal[hidden] { display: none; }
+.pp-userphoto-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+}
+.pp-userphoto-modal-content {
+  position: relative;
+  background: var(--surface-2, #1f1f1f);
+  border: 1px solid var(--border-soft, #3a3a3a);
+  border-radius: var(--radius-md, 8px);
+  padding: var(--space-4, 16px);
+  width: min(560px, 92vw);
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+.pp-userphoto-modal-content h2 {
+  margin: 0 0 var(--space-3, 12px) 0;
+  font-size: 1.1em;
+}
+.pp-userphoto-preview-wrap {
+  background: #0a0a0a;
+  border: 1px solid var(--border-soft, #3a3a3a);
+  border-radius: var(--radius-sm, 4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  max-height: 50vh;
+  overflow: hidden;
+  margin-bottom: var(--space-3, 12px);
+}
+.pp-userphoto-preview {
+  max-width: 100%;
+  max-height: 50vh;
+  object-fit: contain;
+  display: block;
+}
+.pp-userphoto-info {
+  margin: 0 0 var(--space-3, 12px) 0;
+  color: var(--text-muted, #999);
+  font-size: 0.85em;
+}
+.pp-userphoto-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2, 8px);
+}
+.pp-userphoto-modal-actions button {
+  padding: 8px 18px;
+  border-radius: var(--radius-sm, 4px);
+  border: 1px solid var(--border-soft, #3a3a3a);
+  background: var(--surface-3, #333);
+  color: var(--text, #eee);
+  font-family: inherit;
+  font-size: 0.95em;
+  cursor: pointer;
+}
+.pp-userphoto-modal-actions button:hover:not(:disabled) {
+  background: var(--surface-hover, #444);
+}
+.pp-userphoto-cancel { /* default styled */ }
+.pp-userphoto-confirm {
+  border-color: rgba(245, 158, 11, 0.5);
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  font-weight: 500;
+}
+.pp-userphoto-confirm:hover:not(:disabled) {
+  background: rgba(245, 158, 11, 0.25);
+}
+
+
+/* perchpi:user-photo-hidden-fix-v1
+   The [hidden] HTML attribute must beat display:flex on these elements.
+   Without this, .pp-userphoto-menu (display:flex on .pp-userphoto-menu)
+   and .pp-userphoto-modal (display:flex) ignore the hidden attribute. */
+.pp-userphoto-menu[hidden]  { display: none; }
+.pp-userphoto-modal[hidden] { display: none; }
+
+/* perchpi:user-photo-position-v2
+   Widget positioned next to hero photo, vertically centered, 12px gap.
+   Overrides v1 inline-row layout (margin-top/margin-bottom). */
+.pp-species-hero .pp-userphoto {
+  align-self: center;
+  margin: 0 0 0 12px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+/* When the dropdown menu opens, anchor it to the right edge of its
+   trigger so it doesn't overflow the right edge of the hero card. */
+.pp-species-hero .pp-userphoto-menu {
+  left: auto;
+  right: 0;
+}
+
+/* perchpi:chartdiv-restore — popup container for generateMiniGraph (Species Management → Stats column) */
+.chartdiv {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -300px;  /* half of height; centers vertically with horizontal margin-left */
+  width: 960px;
+  height: 600px;
+  margin-left: -480px;
+  background-color: var(--card-bg, #1c1c1e);
+  color: var(--text, #ffffff);
+  z-index: 9999;
+  overflow: auto;
+  border: 1px solid var(--text-faint, #6e6e73);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  padding: 32px 16px 16px 16px;  /* dropdown clearance handled inside Chart.js layout: { padding: { bottom: 30 } } */
+}
+.chartdiv canvas {
+  background-color: var(--card-bg, #1c1c1e);
+}
+.chartdiv #chartcb {
+  background: transparent;
+  color: var(--text, #ffffff);
+  border: 1px solid var(--text-faint, #6e6e73);
+  border-radius: 4px;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+.chartdiv select {
+  /* perchpi:chart-dropdown-style-v1 — mint accent for discoverability */
+  background: rgba(74, 222, 128, 0.15);
+  color: var(--text, #ffffff);
+  border: 1px solid #4ade80;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  width: auto;
+  min-width: 110px;
+}
+.chartdiv select:hover {
+  background: rgba(74, 222, 128, 0.25);
+  border-color: #9fe29b;
+}
+.chartdiv select option {
+  /* perchpi:chart-dropdown-option-v1 — dark bg, light text in the open list */
+  background: var(--card-bg, #1c1c1e);
+  color: var(--text, #ffffff);
+  padding: 4px 8px;
+}
+.chartdiv select option:checked {
+  background: #4ade80;
+  color: #1c1c1e;
+  font-weight: 600;
+}
+
+/* perchpi:species-tools-thumbnail-v1 — Species Management Photo column */
+#speciesTable td .pp-thumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+#speciesTable td .pp-thumb-user {
+  border: 2px solid #f59e0b;  /* amber, matches Wave 3 personal-photo border */
+}
+#speciesTable td .pp-thumb-fallback {
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  line-height: 48px;
+  text-align: center;
+  font-size: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  color: var(--text-dim, #a8a8ad);
+}
+
+
+/* perchpi:scrubber-strip-axes-v1 — hide matplotlib axis labels baked into source PNGs.
+   Best-guess offsets for ~1168x462 PNGs with ~10% left, ~7% right, ~3% top, ~6% bottom
+   axis padding. Tune the four offset/size numbers below if needed. */
+.pp-scrubber-spec {
+  position: absolute !important;
+  left: -11.5% !important;
+  top: -4% !important;
+  width: 122% !important;  /* tuned: right edge needed +3% to clear right-axis padding */
+  height: 112% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: fill !important;
+}
+
+
+/* perchpi:dock-scrubber-position-v1 — sticky-bottom audio dock for kiosk
+   Empty state: hidden (no audio loaded yet, .pp-scrubber-ready not set by JS).
+   Loaded state: fixed strip across viewport bottom, slim and unobtrusive.
+   Desktop (>=1025px): inset from left to clear the 240px sticky sidebar.
+   Below 1025px: full viewport width (sidebar is fly-out + backdrop).
+   Container .app-main gets bottom padding so list ends don't hide behind dock. */
+
+#pp-dock-scrubber {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 80px;
+  z-index: 50;
+  border-radius: 0;
+  border-top: 1px solid var(--accent, #4ade80);
+  background: #1c1c1e;
+  margin: 0;
+  transition: transform 200ms ease-out;
+}
+
+#pp-dock-scrubber:not(.pp-scrubber-ready) {
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+#pp-dock-scrubber.pp-scrubber-ready {
+  transform: translateY(0);
+}
+
+@media (min-width: 1025px) {
+  #pp-dock-scrubber {
+    left: var(--sidebar-width);
+  }
+}
+
+/* Reserve space at the bottom of main content so list ends are not occluded
+   when dock is visible. Always reserved (even when empty) to prevent layout
+   shift on first play. 80px dock + small breathing room. */
+.app-main {
+  padding-bottom: calc(var(--space-4) + 96px);
+}
+@media (min-width: 768px) {
+  .app-main {
+    padding-bottom: calc(var(--space-6) + 96px);
+  }
+}
+@media (min-width: 1025px) {
+  .app-main {
+    padding-bottom: calc(var(--space-8) + 96px);
+  }
+}
+
+/* perchpi:refresh-button-css-v1 — per-species photo refresh button overlay */
+.pp-refresh-photo-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--border-strong, #3a3a3e);
+  background: rgba(0, 0, 0, 0.7);
+  color: var(--accent, #4ade80);
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 150ms;
+}
+.pp-refresh-photo-btn:hover { background: rgba(74, 222, 128, 0.2); }
+.pp-refresh-photo-btn:disabled { cursor: default; opacity: 0.7; }
+.pp-refresh-photo-btn.pp-spinning {
+  animation: pp-refresh-spin 1s linear infinite;
+}
+.pp-refresh-photo-btn.pp-refresh-failed {
+  color: var(--status-low, #f87171);
+  border-color: var(--status-low, #f87171);
+}
+@keyframes pp-refresh-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* perchpi:chartdiv-restore — popup container for generateMiniGraph (Species Management → Stats column) */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   perchpi:quarantine-pulse-css-v1 — amber pulse on Quarantine sidebar item
+   when there are unseen quarantined detections (compared to localStorage
+   pp_last_quarantine_visit). Class is added/removed by perchpi.js on
+   DOMContentLoaded and on click of the Quarantine link.
+   Amber tone matches --status-warn (#fbbf24) and pp-chip-uncommon background.
+   ════════════════════════════════════════════════════════════════════════════ */
+@keyframes pp-quarantine-pulse {
+  0%, 100% {
+    background-color: rgba(245, 158, 11, 0.10);
+    box-shadow: inset 0 0 0 1px rgba(251, 191, 36, 0.35);
+  }
+  50% {
+    background-color: rgba(245, 158, 11, 0.30);
+    box-shadow: inset 0 0 0 1px rgba(251, 191, 36, 0.75);
+  }
+}
+.nav-item.pp-quarantine-pulse {
+  animation: pp-quarantine-pulse 1.8s ease-in-out infinite;
+  border-radius: 6px;
+}
+.nav-item.pp-quarantine-pulse .nav-item-icon,
+.nav-item.pp-quarantine-pulse .nav-item-label {
+  color: #fbbf24;
+}
+
+
+/* ============================================================================
+   perchpi:overview-hero-stats-v1
+   ----------------------------------------------------------------------------
+   - .latest-stat-rail: third region of the hero card showing
+     ALL-TIME SPECIES (prominent) and ALL-TIME detections (subdued).
+   - .pp-sys-grid-3col: 3-column system strip (Analyzer | Disk | Mic).
+   ============================================================================ */
+
+.latest-stat-rail {
+  flex: 0 0 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 18px;
+  border-left: 1px solid var(--border-soft, rgba(255,255,255,0.08));
+  text-decoration: none;
+  color: inherit;
+  transition: background 120ms ease;
+}
+.latest-stat-rail:hover {
+  background: var(--surface-2, rgba(255,255,255,0.03));
+}
+.latest-stat-rail:focus-visible {
+  outline: 2px solid var(--accent, #7be07b);
+  outline-offset: -2px;
+}
+.latest-stat-block {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.latest-stat-block--lg .latest-stat-num {
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent, #7be07b);
+  letter-spacing: -0.02em;
+}
+.latest-stat-block--lg .latest-stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text, #fff);
+  margin-top: 2px;
+}
+.latest-stat-block--sm .latest-stat-num {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--text-dim, #a8a8ad);
+  letter-spacing: -0.01em;
+}
+.latest-stat-block--sm .latest-stat-label {
+  font-size: 9px;
+  font-weight: 500;
+  text-transform: lowercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint, #808088);
+  margin-top: 1px;
+}
+.latest-stat-divider {
+  width: 60%;
+  height: 1px;
+  background: var(--border-soft, rgba(255,255,255,0.08));
+}
+
+/* On the 7" Pi Display 2 / smaller laptops: shrink the rail slightly */
+@media (max-width: 1024px) {
+  .latest-stat-rail { flex: 0 0 170px; padding: 12px 14px; }
+  .latest-stat-block--lg .latest-stat-num { font-size: 52px; }
+  .latest-stat-block--sm .latest-stat-num { font-size: 18px; }
+}
+
+/* On phone-width, the .latest-card already stacks vertically (see existing
+   @media (max-width: 480px) rule). The rail drops below the body and shows
+   the two stats side-by-side instead of stacked. */
+@media (max-width: 480px) {
+  .latest-stat-rail {
+    flex: 0 0 auto;
+    flex-direction: row;
+    justify-content: space-around;
+    border-left: none;
+    border-top: 1px solid var(--border-soft, rgba(255,255,255,0.08));
+    padding: 14px 16px;
+  }
+  .latest-stat-divider {
+    width: 1px;
+    height: 36px;
+  }
+}
+
+/* ── 3-column system strip (replaces 2x2 + bar) ─────────────────────────── */
+.pp-sys-grid-3col {
+  grid-template-columns: 1fr 1fr 2fr;
+}
+.sys-item--mic {
+  align-items: stretch;
+}
+.sys-item--mic .sys-mic {
+  margin-top: 0;
+  background: transparent;
+  padding: 0;
+  width: 100%;
+}
+.sys-item--mic .sys-mic-label { margin-bottom: 4px; }
+
+@media (max-width: 720px) {
+  .pp-sys-grid-3col {
+    grid-template-columns: 1fr 1fr;
+  }
+  .sys-item--mic {
+    grid-column: 1 / -1;
+  }
+}
+/* End perchpi:overview-hero-stats-v1 */
+
+/* perchpi:list-controls-module-v1 — shared sort + filter controls */
+.pp-list-controls {
+  margin: 0 0 16px 0;
+}
+.pp-list-sort {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 12px 0;
+}
+.pp-list-sort a {
+  padding: 6px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--pp-text, #e8e8e8);
+  background: var(--pp-button-bg, #2a2a2a);
+  border: 1px solid var(--pp-border, #333);
+  font-size: 0.9em;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+.pp-list-sort a:hover {
+  border-color: var(--pp-accent, #4ade80);
+}
+.pp-list-sort a.active {
+  background: var(--pp-accent, #4ade80);
+  color: var(--pp-bg, #0a0a0a);
+  border-color: var(--pp-accent, #4ade80);
+  font-weight: 500;
+}
+.pp-list-filter-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 16px 0;
+}
+.pp-list-filter-input {
+  flex: 1;
+  padding: 8px 12px;
+  background: var(--pp-input-bg, #1a1a1a);
+  border: 1px solid var(--pp-border, #333);
+  border-radius: 6px;
+  color: inherit;
+  font: inherit;
+}
+.pp-list-filter-input:focus {
+  outline: 2px solid var(--pp-accent, #4ade80);
+  outline-offset: 0;
+}
+.pp-list-counter {
+  color: var(--pp-text-dim, #999);
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+/* perchpi:overview-name-link-css-v1 — common-name anchor inside Overview row name divs */
+.recent-name-link,
+.today-name-link {
+  color: inherit;
+  text-decoration: none;
+}
+.recent-name-link:hover,
+.today-name-link:hover {
+  color: var(--accent-hover);
+}
+
+/* perchpi:leader-noanchor-css-v1 — leader rows have plain-text name (no link affordance)
+   because tapping them expands the group instead of navigating */
+.recent-name-text {
+  color: inherit;
+}
+
+/* perchpi:topspecies-name-link-css-v1 — common-name anchors in Top Species widgets */
+.top-name-link,
+.species-name-link {
+  color: inherit;
+  text-decoration: none;
+}
+.top-name-link:hover,
+.species-name-link:hover {
+  color: var(--accent-hover);
+}
+
+
+/* ──────────────────────────────────────────────────────────────────── */
+/* perchpi:external-links-v1 — Species Profile external link buttons    */
+/* ──────────────────────────────────────────────────────────────────── */
+.pp-external-links-section {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+.pp-external-links-label {
+  color: var(--text-dim, #94a3b8);
+  font-size: 13px;
+  margin: 0 0 12px;
+  letter-spacing: 0.02em;
+}
+.pp-external-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.pp-ext-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  background: rgba(148, 163, 184, 0.10);
+  border: 1px solid rgba(148, 163, 184, 0.20);
+  border-radius: 8px;
+  color: var(--text, #e2e8f0);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+}
+.pp-ext-btn:hover,
+.pp-ext-btn:focus-visible {
+  background: rgba(95, 229, 144, 0.12);
+  border-color: rgba(95, 229, 144, 0.40);
+  color: var(--accent-hover, #5fe590);
+  outline: none;
+}
+.pp-ext-btn svg {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+/* Narrow screens (e.g. Pi 7" display in portrait): wrap to 2 columns gracefully */
+@media (max-width: 520px) {
+  .pp-ext-btn {
+    padding: 10px 14px;
+    font-size: 14px;
+    gap: 8px;
+  }
+  .pp-ext-btn svg { width: 18px; height: 18px; }
+}
+/* /perchpi:external-links-v1 */
+
+
+/* ──────────────────────────────────────────────────────────────────────── */
+/* perchpi:species-hero-name-typography-v1                                  */
+/* Match hero card title typography on Species Detail + Species Profile to  */
+/* Overview's .latest-name / .latest-sci treatment.                         */
+/* ──────────────────────────────────────────────────────────────────────── */
+.latest-card-name {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+}
+.latest-card-sci {
+  font-size: 14px;
+  font-style: italic;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+/* Anchor styling for the clickable common name + sci name on Species Detail.
+   On Species Profile the names are NOT wrapped in <a>, so this rule simply
+   doesn't apply there. */
+.latest-card-spp-link,
+.latest-card-spp-link:visited {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.latest-card-spp-link:hover,
+.latest-card-spp-link:focus-visible {
+  color: var(--accent-hover);
+  outline: none;
+}
+/* /perchpi:species-hero-name-typography-v1 */
+
+
+/* ──────────────────────────────────────────────────────────────────────── */
+/* perchpi:species-hero-dedup-v1                                            */
+/* Vertically center the name+sci block next to the hero photo so it        */
+/* aligns with the photo's midpoint instead of floating top-right.          */
+/* flex:1 makes the body absorb available width — on Species Profile this   */
+/* pushes the user-photo widget naturally to the right edge.                */
+/* ──────────────────────────────────────────────────────────────────────── */
+.pp-species-hero .latest-card-body {
+  flex: 1 1 auto;
+  align-self: center;
+  padding-left: 16px;
+  min-width: 0;
+}
+/* /perchpi:species-hero-dedup-v1 */
+
+
+/* ──────────────────────────────────────────────────────────────────────── */
+/* perchpi:species-hero-stack-v1                                            */
+/* Stack the name+sci block above the user-photo button, both flush-left   */
+/* against the hero photo's right edge, vertically centered.               */
+/* ──────────────────────────────────────────────────────────────────────── */
+.pp-species-hero .pp-hero-stack {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 16px;
+  gap: 12px;
+  min-width: 0;
+}
+/* Visual order: name block first, user-photo widget second */
+.pp-species-hero .pp-hero-stack .latest-card-body {
+  order: 1;
+  flex: 0 0 auto;
+  align-self: stretch;
+  padding-left: 0;
+}
+.pp-species-hero .pp-hero-stack .pp-userphoto {
+  order: 2;
+  align-self: flex-start;
+  margin: 0;
+}
+/* Earlier rules from species-hero-dedup-v1 set .latest-card-body to
+   flex:1/align-self:center; inside the stack we override those because
+   the stack is now what centers, and the body should be its natural height. */
+/* /perchpi:species-hero-stack-v1 */
+
+
+/* ──────────────────────────────────────────────────────────────────────── */
+/* perchpi:quarantine-table-layout-v1                                       */
+/* Quarantine table: horizontal-scroll fallback + sticky headers + tighter  */
+/* cells + narrower audio/actions columns so the table fits 1280px.         */
+/* ──────────────────────────────────────────────────────────────────────── */
+
+/* Scroll container — table can grow wider than viewport on narrow displays */
+.pp-q-table-wrap {
+  overflow-x: auto;
+  overflow-y: visible;
+  max-width: 100%;
+  scrollbar-width: thin;
+}
+
+/* Tighter cells than the global table style (was space-3 / space-4) */
+.pp-q-table th,
+.pp-q-table td {
+  padding: var(--space-2) var(--space-3);
+  vertical-align: middle;
+}
+
+/* Sticky headers within the scroll container */
+.pp-q-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 2;
+  box-shadow: inset 0 -1px 0 var(--border-soft);
+}
+
+/* Audio player — Chrome's default ~280px is bigger than needed */
+.pp-q-table .pp-q-audio audio {
+  /* perchpi:quarantine-audio-width-v1 — bumped 200 → 240 so Chrome shows the scrubber */
+  width: 240px;
+  max-width: 100%;
+  display: block;
+}
+
+/* Actions column — narrower than the inline 180px style */
+.pp-q-table td:last-child,
+.pp-q-table th:last-child {
+  width: 140px;
+  min-width: 140px;
+}
+
+/* When / Quarantined-at / Prob cells: numeric/time content reads tighter */
+.pp-q-table .pp-q-when,
+.pp-q-table .pp-q-prob {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.95em;
+  white-space: nowrap;
+}
+
+/* Reason pill: allow it to wrap if needed instead of forcing wide column */
+.pp-q-table .pp-q-pill {
+  display: inline-block;
+  white-space: normal;
+  line-height: 1.25;
+}
+
+/* Species cell stays comfortable but constrained */
+.pp-q-table td:nth-child(3) {
+  min-width: 140px;
+}
+
+/* /perchpi:quarantine-table-layout-v1 */
+
+
+/* ──────────────────────────────────────────────────────────────────────── */
+/* perchpi:quarantine-audio-compact-v1                                      */
+/* Compact play button by default; full controls expand on click.           */
+/* ──────────────────────────────────────────────────────────────────────── */
+
+/* Compact play/pause button shown when cell is NOT expanded */
+.pp-q-play-toggle {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--accent, #4ade80);
+  color: #0b1220;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+.pp-q-play-toggle:hover {
+  background: var(--accent-hover, #22c55e);
+  transform: scale(1.05);
+}
+.pp-q-play-toggle:focus-visible {
+  outline: 2px solid var(--accent-hover, #22c55e);
+  outline-offset: 2px;
+}
+
+/* Compact cell (default): only the button shows, audio is hidden */
+.pp-q-table .pp-q-audio audio {
+  display: none;
+}
+.pp-q-table .pp-q-audio {
+  /* Tight cell when collapsed */
+  min-width: 48px;
+  width: 48px;
+}
+
+/* Expanded cell: audio visible with full controls, button hidden.
+   Cell grows to fit the player. */
+.pp-q-table .pp-q-audio.pp-q-audio--expanded {
+  width: auto;
+  min-width: 260px;
+}
+.pp-q-table .pp-q-audio.pp-q-audio--expanded audio {
+  display: block;
+  width: 240px;
+  max-width: 100%;
+}
+.pp-q-table .pp-q-audio.pp-q-audio--expanded .pp-q-play-toggle {
+  display: none;
+}
+
+/* /perchpi:quarantine-audio-compact-v1 */
+
+
+/* perchpi:nn-archived-badge-v1 ── archived-state badge (📦) */
+.pp-archived-badge {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 0.9em;
+  opacity: 0.65;
+  cursor: default;
+  user-select: none;
+  vertical-align: middle;
+  line-height: 1;
+}
+.pp-archived-badge:hover { opacity: 1; }
+
+
+/* perchpi:species-tools-compact-headers-v1 — compact table for 1280px Pi Display.
+   - Centers headers + cells for icon/numeric columns
+   - Enlarges STATS chart icon for visibility
+   - Tightens padding on narrow columns */
+
+#speciesTable thead .pp-icon-th {
+  text-align: center;
+  font-size: 1.1rem;
+  padding-left: 4px;
+  padding-right: 4px;
+  white-space: nowrap;
+}
+
+#speciesTable thead .pp-icon-th span {
+  cursor: help;
+}
+
+/* Center the data cells under STATS, COUNT, the three state columns, and Delete.
+   Column indices match the <thead> order: 1=Photo, 2=Common, 3=Sci, 4=Stats,
+   5=Count, 6=LastSeen, 7=Max, 8=Prob, 9=Conf, 10=Excl, 11=White, 12=Delete. */
+#speciesTable tbody td:nth-child(4),   /* Stats */
+#speciesTable tbody td:nth-child(5),   /* Count */
+#speciesTable tbody td:nth-child(9),   /* Confirmed */
+#speciesTable tbody td:nth-child(10),  /* Excluded */
+#speciesTable tbody td:nth-child(11),  /* Whitelisted */
+#speciesTable tbody td:nth-child(12) { /* Delete (last static col; 'Files'
+                                          is injected by JS at last-1) */
+  text-align: center;
+}
+
+/* Center the corresponding headers too, so columns visually align */
+#speciesTable thead th:nth-child(4),
+#speciesTable thead th:nth-child(5),
+#speciesTable thead th:nth-child(9),
+#speciesTable thead th:nth-child(10),
+#speciesTable thead th:nth-child(11),
+#speciesTable thead th:nth-child(12) {
+  text-align: center;
+}
+
+/* Bigger, more obvious STATS chart icon. Overrides the old inline height:1em
+   that the patcher removed; max-width keeps it from blowing up if the image
+   has larger intrinsic dimensions. */
+#speciesTable .pp-stats-icon {
+  width: 32px !important;
+  height: 32px !important;
+  max-width: 32px;
+  max-height: 32px;
+  opacity: 0.85;
+  transition: opacity 0.15s;
+}
+#speciesTable .pp-stats-icon:hover {
+  opacity: 1;
+}
+
+/* Narrow padding for the icon-only state columns so they don't waste horizontal
+   space on a 1280px viewport */
+#speciesTable thead .pp-icon-th,
+#speciesTable tbody td:nth-child(9),
+#speciesTable tbody td:nth-child(10),
+#speciesTable tbody td:nth-child(11),
+#speciesTable tbody td:nth-child(12) {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+/* End perchpi:species-tools-compact-headers-v1 */
+
+
+/* perchpi:species-list-redesign-v2 - Species List editor (v2 layout).
+   - All Species LEFT, $title Species RIGHT
+   - Right column has invisible sort-row spacer for top alignment
+   - Both columns have search boxes for parallel structure
+   - Both <select> elements share min-height; both buttons share styling */
+
+.pp-species-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+.pp-species-editor-banner {
+  background: var(--surface-2, #1f1f24);
+  border: 1px solid var(--border, #2a2a2f);
+  border-left: 3px solid var(--accent, #4ade80);
+  border-radius: var(--radius-sm, 6px);
+  padding: 0.75rem 1rem;
+  line-height: 1.4;
+  font-size: 0.9rem;
+  color: var(--text, #e5e5ea);
+}
+
+.pp-species-editor-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.pp-species-editor-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.pp-species-editor-col h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text, #e5e5ea);
+}
+
+.pp-species-editor-col form {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pp-species-editor-col select {
+  width: 100%;
+  min-height: 480px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  background: var(--surface-2, #1f1f24);
+  border: 1px solid var(--border, #2a2a2f);
+  border-radius: var(--radius-sm, 6px);
+  color: var(--text, #e5e5ea);
+}
+
+.pp-species-editor-col input[type="text"] {
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+/* Sort row: visible on LEFT, invisible-but-space-occupying spacer on RIGHT.
+   The .pp-spacer modifier hides content while preserving identical height
+   so both columns' top edges align perfectly. */
+.pp-species-editor-sort-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.4rem 0;
+  font-size: 0.85rem;
+  color: var(--text-dim, #a8a8ad);
+  min-height: 2rem;       /* ensures spacer reserves same vertical space */
+}
+
+.pp-species-editor-sort-row.pp-spacer {
+  /* perchpi:species-list-align-fix-v1 — the spacer now contains a mirror of the real
+     sort-row markup (radio inputs + labels) so its height is computed from
+     the same content. visibility:hidden preserves layout space while
+     hiding it; pointer-events:none prevents accidental interaction with
+     the hidden controls. */
+  visibility: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.pp-species-editor-sort-row .pp-sort-label {
+  font-weight: 500;
+}
+
+.pp-species-editor-sort-row .pp-sort-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  color: var(--text, #e5e5ea);
+}
+
+.pp-species-editor-sort-row .pp-sort-option input[type="radio"] {
+  width: auto;
+  min-height: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.pp-species-editor-btn {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: var(--surface-2, #1f1f24);
+  border: 1px solid var(--border, #2a2a2f);
+  border-radius: var(--radius-sm, 6px);
+  color: var(--text, #e5e5ea);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.pp-species-editor-btn:hover {
+  background: var(--surface-3, #28282d);
+  border-color: var(--accent, #4ade80);
+}
+
+.pp-species-editor-btn.pp-btn-add {
+  border-left: 3px solid var(--accent, #4ade80);
+}
+
+.pp-species-editor-btn.pp-btn-remove {
+  border-left: 3px solid #ef4444;
+}
+
+/* Below 900px viewport: stack columns vertically.
+   Pi Display at 1280x800 stays in 2-column mode. */
+@media (max-width: 900px) {
+  .pp-species-editor-cols {
+    grid-template-columns: 1fr;
+  }
+  .pp-species-editor-col select {
+    min-height: 320px;
+  }
+  /* Hide the spacer when stacked - no need to reserve space */
+  .pp-species-editor-sort-row.pp-spacer {
+    display: none;
+  }
+}
+
+/* End perchpi:species-list-redesign-v2 */
+
+/* perchpi:ambiguous-timestamp-amber-v1 — amber timestamp for live-ambiguous detections (Recordings page) */
+.detection-time--ambiguous {
+  color: #f5a623;
+  font-weight: 600;
+}
+
+/* perchpi:c-recordings-v1 */
+.pp-rec-filters{display:flex;gap:var(--space-3,12px);flex-wrap:wrap;align-items:center;margin-bottom:var(--space-3,12px)}
+.pp-rec-filters select,.pp-rec-filters input[type=date],.pp-rec-filters input[type=number]{background:var(--pp-surface,#111);color:inherit;border:1px solid #333;border-radius:var(--radius-2,8px);padding:6px 10px}
+.pp-rec-filters .pp-minc input{width:64px}
+.pp-rec-filters .pp-clear{opacity:.7;font-size:.85em}
+.pp-rec-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--space-2,8px)}
+.pp-rec-row{display:grid;grid-template-columns:120px 1fr auto auto;gap:var(--space-3,12px);align-items:center;background:var(--pp-surface,#111);border-radius:var(--radius-2,8px);padding:8px;cursor:pointer}
+.pp-rec-spec{width:120px;height:46px;object-fit:cover;border-radius:6px;image-rendering:-webkit-optimize-contrast;background:#000}
+.pp-rec-name{font-weight:600;display:block}
+.pp-rec-sub{opacity:.65;font-size:.85em}
+.pp-rec-row .play-btn{font-size:1.1em;padding:6px 12px;border-radius:999px;border:1px solid var(--pp-accent,#4ade80);background:transparent;color:var(--pp-accent,#4ade80);cursor:pointer}
+.pp-pager{display:flex;gap:var(--space-3,12px);align-items:center;justify-content:center;margin-top:var(--space-3,12px)}
+.pp-pager a{color:var(--pp-accent,#4ade80);text-decoration:none}
+.pp-pager-at{opacity:.7}
+.pp-empty{opacity:.7;text-align:center;padding:var(--space-4,24px)}
+@media(max-width:720px){.pp-rec-row{grid-template-columns:84px 1fr auto auto}.pp-rec-spec{width:84px;height:36px}}
+
+/* perchpi:rec-playbtn-green-v1 — Recordings play button playing-state.
+   Idle stays outlined (see .pp-rec-row .play-btn above). When playing, match
+   the app-wide solid-green fill + black icon. Specificity 0,3,0 beats both
+   .pp-rec-row .play-btn (0,2,0) and .play-btn.playing (0,2,0). */
+.pp-rec-row .play-btn.playing {
+  background: var(--accent, #4ade80);
+  color: #000;
+  border-color: var(--accent, #4ade80);
+}
+
+/* perchpi:playbtn-green-rows-v1 — green-outline row play buttons on
+   Overview (.recent-item), Birds Today (.species-item), Best Recordings
+   (.best-item), matching the Recordings page look. Each keeps its existing
+   size; only the color treatment changes. Idle selectors are 0,2,0 (beat base
+   .play-btn 0,1,0); playing selectors are 0,3,0 (beat .play-btn.playing 0,2,0). */
+.recent-item .play-btn,
+.species-item .play-btn,
+.best-item .play-btn {
+  background: transparent;
+  border: 1px solid var(--accent, #4ade80);
+  color: var(--accent, #4ade80);
+}
+.recent-item .play-btn.playing,
+.species-item .play-btn.playing,
+.best-item .play-btn.playing {
+  background: var(--accent, #4ade80);
+  color: #000;
+  border-color: var(--accent, #4ade80);
+}
+
+/* perchpi:overview-bw-link-style-v1 — outlined green pill, fills on hover (Option B); arrow via entity */
+.pp-bw-label-row { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.pp-bw-overview-link {
+  font-size: .72rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+  text-decoration: none; white-space: nowrap; line-height: 1;
+  color: #4ade80; border: 1px solid #4ade80; border-radius: 999px;
+  padding: .3rem .7rem; transition: background-color .15s ease, color .15s ease;
+}
+.pp-bw-overview-link:hover, .pp-bw-overview-link:focus {
+  background-color: #4ade80; color: #0b0f0c; outline: none;
+}
+
+/* perchpi:quarantine-hide-css-v1 — hide button on .pp-rec-row (4th grid col) */
+.pp-rec-row .detection-hide{
+  font-size:1.05em;
+  line-height:1;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--text-dim,#888);
+  background:transparent;
+  color:var(--text-dim,#888);
+  cursor:pointer;
+  justify-self:end;
+}
+.pp-rec-row .detection-hide:hover{
+  border-color:#ef4444;
+  color:#ef4444;
+}
+.pp-rec-row .detection-hide:active{ transform:scale(0.94); }
+.pp-rec-row .detection-hide:disabled{ opacity:0.5; cursor:default; }

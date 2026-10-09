@@ -1,0 +1,10 @@
+[Unit]
+Description=BirdNET-Pi Spectrogram Viewer
+[Service]
+Restart=always
+RestartSec=10
+Type=simple
+User=birder
+ExecStart=/usr/local/bin/spectrogram.sh
+[Install]
+WantedBy=multi-user.target

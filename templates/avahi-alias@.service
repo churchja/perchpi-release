@@ -1,0 +1,11 @@
+[Unit]
+Description=Publish %I as alias for %H.local via mdns
+After=network.target network-online.target
+Requires=network-online.target
+[Service]
+Restart=always
+RestartSec=3
+Type=simple
+ExecStart=/bin/bash -c "/usr/bin/avahi-publish -a -R %I $(hostname -I |cut -d' ' -f1)"
+[Install]
+WantedBy=multi-user.target

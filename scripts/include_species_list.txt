@@ -1,0 +1,1 @@
+/home/birder/BirdNET-Pi/include_species_list.txt

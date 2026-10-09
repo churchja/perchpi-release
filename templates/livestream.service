@@ -1,0 +1,12 @@
+[Unit]
+Description=BirdNET-Pi Live Stream
+After=network-online.target
+Requires=network-online.target
+[Service]
+Restart=always
+Type=simple
+RestartSec=3
+User=birder
+ExecStart=/usr/local/bin/livestream.sh
+[Install]
+WantedBy=multi-user.target

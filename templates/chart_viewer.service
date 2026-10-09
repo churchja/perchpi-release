@@ -1,0 +1,10 @@
+[Unit]
+Description=BirdNET-Pi Chart Viewer Service
+[Service]
+Restart=always
+RestartSec=120
+Type=simple
+User=birder
+ExecStart=/home/birder/BirdNET-Pi/birdnet/bin/python3 /usr/local/bin/daily_plot.py --daemon --sleep 2
+[Install]
+WantedBy=multi-user.target

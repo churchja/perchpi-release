@@ -1,0 +1,104 @@
+# perchpi:non-bird-suppression-v1
+# Added 20260507-140010 — 72 non-bird classes (13 garbage + 38 frogs + 3 mammals + 18 insects)
+Dog_Dog
+Engine_Engine
+Environmental_Environmental
+Fireworks_Fireworks
+Gun_Gun
+Human non-vocal_Human non-vocal
+Human vocal_Human vocal
+Human whistle_Human whistle
+Noise_Noise
+Power tools_Power tools
+Siren_Siren
+Gryllus assimilis_Gryllus assimilis
+Miogryllus saussurei_Miogryllus saussurei
+Acris crepitans_Northern Cricket Frog
+Acris gryllus_Southern Cricket Frog
+Anaxyrus americanus_American Toad
+Anaxyrus canorus_Yosemite Toad
+Anaxyrus cognatus_Great Plains Toad
+Anaxyrus fowleri_Fowler's Toad
+Anaxyrus houstonensis_Houston Toad
+Anaxyrus microscaphus_Arizona Toad
+Anaxyrus quercicus_Oak Toad
+Anaxyrus speciosus_Texas Toad
+Anaxyrus terrestris_Southern Toad
+Anaxyrus woodhousii_Woodhouse's Toad
+Dryophytes andersonii_Pine Barrens Treefrog
+Dryophytes arenicolor_Canyon Treefrog
+Dryophytes avivoca_Bird-voiced Treefrog
+Dryophytes chrysoscelis_Cope's Gray Treefrog
+Dryophytes cinereus_Green Treefrog
+Dryophytes femoralis_Pine Woods Treefrog
+Dryophytes gratiosus_Barking Treefrog
+Dryophytes squirellus_Squirrel Treefrog
+Dryophytes versicolor_Gray Treefrog
+Eleutherodactylus planirostris_Greenhouse Frog
+Hyliola regilla_Pacific Chorus Frog
+Lithobates catesbeianus_American Bullfrog
+Lithobates clamitans_Green Frog
+Lithobates palustris_Pickerel Frog
+Lithobates sylvaticus_Wood Frog
+Pseudacris brimleyi_Brimley's Chorus Frog
+Pseudacris clarkii_Spotted Chorus Frog
+Pseudacris crucifer_Spring Peeper
+Pseudacris feriarum_Upland Chorus Frog
+Pseudacris nigrita_Southern Chorus Frog
+Pseudacris ocularis_Little Grass Frog
+Pseudacris ornata_Ornate Chorus Frog
+Pseudacris streckeri_Strecker's Chorus Frog
+Pseudacris triseriata_Striped Chorus Frog
+Scaphiopus couchii_Couch's Spadefoot
+Spea bombifrons_Plains Spadefoot
+Canis latrans_Coyote
+Canis lupus_Gray Wolf
+Sciurus carolinensis_Eastern Gray Squirrel
+Allonemobius allardi_Allard's Ground Cricket
+Allonemobius tinnulus_Tinkling Ground Cricket
+Allonemobius walkeri_Walker's Ground Cricket
+Anaxipha exigua_Say's Trig
+Gryllus fultoni_Southern Wood Cricket
+Gryllus pennsylvanicus_Fall Field Cricket
+Gryllus rubens_Southeastern Field Cricket
+Neoconocephalus bivocatus_False Robust Conehead
+Neoconocephalus ensiger_Sword-bearing Conehead
+Neoconocephalus retusus_Round-tipped Conehead
+Neoconocephalus robustus_Robust Conehead
+Oecanthus celerinictus_Fast-calling Tree Cricket
+Oecanthus exclamationis_Davis's Tree Cricket
+Oecanthus fultoni_Snowy Tree Cricket
+Oecanthus nigricornis_Blackhorned Tree Cricket
+Oecanthus niveus_Narrow-winged Tree Cricket
+Oecanthus pini_Pine Tree Cricket
+Oecanthus quadripunctatus_Four-spotted Tree Cricket
+Ixobrychus_minutus_Little_Bittern
+# perchpi:non-bird-suppression-v2 — 20260510-204841 supplemental
+# Sweep of BirdNET labels.txt caught 23 additional non-bird classes
+# missed by v1. Triggered by Jumping Bush Cricket (Orocharis saltator)
+# slipping through and appearing in detections 2026-05-10.
+Amblycorypha alexanderi_Clicker Round-winged Katydid
+Amblycorypha longinicta_Common Virtuoso Katydid
+Amblycorypha oblongifolia_Oblong-winged Katydid
+Amblycorypha rotundifolia_Rattler Round-winged Katydid
+Conocephalus brevipennis_Short-winged Meadow Katydid
+Conocephalus fasciatus_Slender Meadow Katydid
+Eunemobius carolinus_Carolina Ground Cricket
+Eunemobius confusus_Confused Ground Cricket
+Gastrophryne carolinensis_Eastern Narrow-mouthed Toad
+Gastrophryne olivacea_Great Plains Narrow-mouthed Toad
+Incilius valliceps_Gulf Coast Toad
+Neonemobius cubensis_Cuban Ground Cricket
+Odocoileus virginianus_White-tailed Deer
+Orchelimum agile_Agile Meadow Katydid
+Orchelimum concinnum_Stripe-faced Meadow Katydid
+Orchelimum pulchellum_Handsome Meadow Katydid
+Orocharis saltator_Jumping Bush Cricket
+Pterophylla camellifolia_Common True Katydid
+Scudderia curvicauda_Curve-tailed Bush Katydid
+Scudderia furcata_Fork-tailed Bush Katydid
+Scudderia texensis_Texas Bush Katydid
+Tamias striatus_Eastern Chipmunk
+Tamiasciurus hudsonicus_Red Squirrel
+Sternula_albifrons_Little_Tern
+Megascops asio_Eastern Screech-Owl

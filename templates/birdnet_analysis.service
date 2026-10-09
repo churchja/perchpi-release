@@ -1,0 +1,10 @@
+[Unit]
+Description=BirdNET Analysis
+[Service]
+Restart=always
+Type=simple
+RestartSec=2
+User=birder
+ExecStart=/home/birder/BirdNET-Pi/birdnet/bin/python3 /usr/local/bin/birdnet_analysis.py
+[Install]
+WantedBy=multi-user.target
