@@ -256,6 +256,11 @@ create_user_and_dirs() {
         "${EXTRACTED}/By_Date" "${EXTRACTED}/Charts" \
         "${STREAMDATA}" "${PROCESSED}"
 
+    # perchpi:installer-s21b2-bird-images-v1 (D-S21-5 = audit B4): the photo cron (birder) and
+    # the web's photo upload/remove (caddy) both write here. Left to whichever came first it
+    # was 0755 with one owner, and the other writer failed (upload -> 500 "save failed").
+    sudo install -d -o "${PERCHPI_USER}" -g caddy -m 2775 "${EXTRACTED}/bird_images"
+
     # Must be /var/lib, not /tmp — caddy.service has PrivateTmp=yes, so /tmp
     # is invisible to Caddy even though it's visible to the writer (§4).
     sudo mkdir -p /var/lib/perchpi-hls /var/lib/perchpi-weather
@@ -609,14 +614,19 @@ configure_caddy() {
 http:// {
 	root * ${EXTRACTED}
 	file_server browse
+	# perchpi:installer-s21b2-kiosk-loopback-v1 (D-S21-4): the kiosk browser runs on this Pi
+	# and never signs in, so every thumbnail and Play from /By_Date got 401. Loopback skips
+	# the password; every other source still needs it (same idea as the HLS rule below).
 	handle /By_Date/* {
-		basic_auth {
+		@bydate_remote not remote_ip 127.0.0.1/8 ::1
+		basic_auth @bydate_remote {
 			birdnet ${hashword}
 		}
 		file_server browse
 	}
 	handle /Charts/* {
-		basic_auth {
+		@charts_remote not remote_ip 127.0.0.1/8 ::1
+		basic_auth @charts_remote {
 			birdnet ${hashword}
 		}
 		file_server browse
@@ -1762,6 +1772,11 @@ first_boot_display() {
     #   --disk-cache-size=52428800 = 50 MB cap. The profile is in /tmp, which Trixie
     #       mounts in RAM; uncapped it held 994 MB on LIVE (D-S16c-2,
     #       perchpi:installer-s19a-kiosk-cache-v1)
+    #   --disable-component-update --disable-extensions = the fresh profile held 181 MB an
+    #       hour after boot on S21 run #4: 115 MB of component downloads (crx cache,
+    #       Widevine, a TTS engine, suggest models) and 51 MB of extensions, none used by
+    #       a localhost kiosk and all refetched after every reboot (D-S21-6,
+    #       perchpi:installer-s21b2-kiosk-lean-v1)
     sudo -u "${PERCHPI_USER}" tee "${PERCHPI_HOME}/.config/labwc/autostart" >/dev/null <<'EOF'
 # Clean up stale kiosk profile locks (prevents kiosk failure after unclean shutdown)
 rm -rf /tmp/perchpi-kiosk-profile/Singleton* 2>/dev/null
@@ -1773,6 +1788,8 @@ chromium \
   --kiosk \
   --user-data-dir=/tmp/perchpi-kiosk-profile \
   --disk-cache-size=52428800 \
+  --disable-component-update \
+  --disable-extensions \
   --noerrdialogs \
   --disable-infobars \
   --disable-translate \
@@ -2026,6 +2043,35 @@ verify() {
     code=$(curl -s -o /dev/null -w '%{http_code}' -u "birdnet:${CADDY_PWD}" \
            "http://127.0.0.1/?view=Settings")
     [ "${code}" = "200" ] || abort "The web password stopped working after perchpi-caddy-pwd (got ${code}) (§13.16, D1)."
+
+    # 17. perchpi:installer-s21b2-kiosk-loopback-v1 (D-S21-4): the kiosk (loopback) reaches
+    # /By_Date and /Charts without the password, and every other source still gets 401.
+    # The probe file does not exist, so 404 means Caddy served the path without asking.
+    # [::1] may answer 000 when IPv6 is off; "|| true" keeps a refused connection from
+    # ending the install silently under set -e (it becomes 000 and the named abort).
+    local probe lan_ip
+    for probe in /By_Date/perchpi-gate-probe /Charts/perchpi-gate-probe; do
+        code=$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1${probe}") || true
+        [ "${code}" = "404" ] || abort \
+            "${probe} from loopback returned ${code}, expected 404: the kiosk cannot load thumbnails or Play (§13.17, D-S21-4)."
+        code=$(curl -s -o /dev/null -w '%{http_code}' -g "http://[::1]${probe}") || true
+        [ "${code}" = "404" ] || [ "${code}" = "000" ] || abort \
+            "${probe} from [::1] returned ${code}, expected 404: the kiosk cannot load thumbnails or Play (§13.17, D-S21-4)."
+    done
+    lan_ip=$(hostname -I 2>/dev/null | tr ' ' '\n' | grep -m1 -E '^[0-9]+(\.[0-9]+){3}$' || true)
+    if [ -n "${lan_ip}" ]; then
+        for probe in /By_Date/perchpi-gate-probe /Charts/perchpi-gate-probe; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "http://${lan_ip}${probe}") || true
+            [ "${code}" = "401" ] || abort \
+                "${probe} from ${lan_ip} returned ${code}, expected 401: recordings are open to the LAN (§13.17, D-S21-4)."
+        done
+    else
+        log "No IPv4 LAN address; §13.17's LAN half skipped."
+    fi
+
+    # 18. perchpi:installer-s21b2-bird-images-v1 (D-S21-5 = audit B4): both photo writers can write.
+    [ "$(stat -c '%U:%G %a' "${EXTRACTED}/bird_images")" = "${PERCHPI_USER}:caddy 2775" ] \
+        || abort "${EXTRACTED}/bird_images is not ${PERCHPI_USER}:caddy 2775: photo upload will fail (§13.18, D-S21-5)."
 
     log "All §13 verification gates passed."
 }
