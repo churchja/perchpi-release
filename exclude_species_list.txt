@@ -72,7 +72,6 @@ Oecanthus nigricornis_Blackhorned Tree Cricket
 Oecanthus niveus_Narrow-winged Tree Cricket
 Oecanthus pini_Pine Tree Cricket
 Oecanthus quadripunctatus_Four-spotted Tree Cricket
-Ixobrychus_minutus_Little_Bittern
 # perchpi:non-bird-suppression-v2 — 20260510-204841 supplemental
 # Sweep of BirdNET labels.txt caught 23 additional non-bird classes
 # missed by v1. Triggered by Jumping Bush Cricket (Orocharis saltator)
@@ -100,5 +99,3 @@ Scudderia furcata_Fork-tailed Bush Katydid
 Scudderia texensis_Texas Bush Katydid
 Tamias striatus_Eastern Chipmunk
 Tamiasciurus hudsonicus_Red Squirrel
-Sternula_albifrons_Little_Tern
-Megascops asio_Eastern Screech-Owl
