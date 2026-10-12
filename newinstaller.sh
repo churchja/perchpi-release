@@ -491,7 +491,7 @@ ensure_tflite_wheel() {
     local wheel="${REPO_DIR}/${TFLITE_WHEEL}"
     local want="${MODEL_ASSETS[${TFLITE_WHEEL}]:-}"
     [ -n "${want}" ] || abort "No MODEL_ASSETS checksum for ${TFLITE_WHEEL} (installer bug)."
-    if [ -f "${wheel}" ] && [ "$(sha256sum "${wheel}" | cut -d' ' -f1)" = "${want}" ]; then
+    if [ -f "${wheel}" ] && [ "$(sudo sha256sum "${wheel}" | cut -d' ' -f1)" = "${want}" ]; then  # D-S21-2 perchpi:installer-s21b-sha-sudo-v1
         log "  ${TFLITE_WHEEL} already present and verified."
         return 0
     fi
@@ -531,7 +531,7 @@ fetch_models() {
     cd "${REPO_DIR}"
     for name in "${!MODEL_ASSETS[@]}"; do
         local dest="${REPO_DIR}/${MODEL_DEST[${name}]}"
-        if [ -f "${dest}" ] && [ "$(sha256sum "${dest}" | cut -d' ' -f1)" = "${MODEL_ASSETS[${name}]}" ]; then
+        if [ -f "${dest}" ] && [ "$(sudo sha256sum "${dest}" | cut -d' ' -f1)" = "${MODEL_ASSETS[${name}]}" ]; then  # D-S21-2 perchpi:installer-s21b-sha-sudo-v1
             log "  ${name} already present and verified, skipping."
             continue
         fi
@@ -1487,11 +1487,20 @@ strip_cloudinit_seed() {
 }
 
 first_boot_hostname() {
-    read -r -p "${LOG_PREFIX} Hostname [perchpi]: " HOSTNAME_CHOICE
-    # Default is 'perchpi', NOT 'birdnetpi' — three-way mDNS collisions are a
-    # live problem on Jason's own LAN (§12.2).
-    HOSTNAME_CHOICE="${HOSTNAME_CHOICE:-perchpi}"
-    sudo hostnamectl set-hostname "${HOSTNAME_CHOICE}"
+    # D-S21-1 (perchpi:installer-s21b-hostname-v1): the answer used to reach hostnamectl unvalidated.
+    # In S21 it carried stray arrow-key bytes, hostnamectl refused it, and set -e ended
+    # the install with no ABORT line after sections 4-7 had run (same class as D-S17-5).
+    # Re-prompt until it is a valid single-label hostname; Enter keeps 'perchpi'.
+    local re='^[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?$'
+    while true; do
+        read -r -p "${LOG_PREFIX} Hostname [perchpi]: " HOSTNAME_CHOICE
+        # Default is 'perchpi', NOT 'birdnetpi' — three-way mDNS collisions are a
+        # live problem on Jason's own LAN (§12.2).
+        HOSTNAME_CHOICE="${HOSTNAME_CHOICE:-perchpi}"
+        [[ "${HOSTNAME_CHOICE}" =~ ${re} ]] && break
+        log "Not a valid hostname -- letters, digits and hyphens, 1-63 characters, no hyphen at either end. Enter keeps 'perchpi'."
+    done
+    sudo hostnamectl set-hostname "${HOSTNAME_CHOICE}" || abort "hostnamectl set-hostname '${HOSTNAME_CHOICE}' failed (§12.2)."
     sudo sed -i "s/127.0.1.1.*/127.0.1.1\t${HOSTNAME_CHOICE}/" /etc/hosts
     export HOSTNAME_CHOICE
 }
