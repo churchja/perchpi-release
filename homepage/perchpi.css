@@ -3332,6 +3332,12 @@ img[src$=".user.jpg"] {
   left: auto;
   right: 0;
 }
+/* perchpi:s21c-photo-menu-up-v1 (D-S21-8): .latest-card clips overflow and the widget sits
+   low in the hero, so a downward menu lost its second item (Remove). Open it upward. */
+.pp-species-hero .pp-userphoto-menu {
+  top: auto;
+  bottom: calc(100% + 4px);
+}
 
 /* perchpi:chartdiv-restore — popup container for generateMiniGraph (Species Management → Stats column) */
 .chartdiv {
