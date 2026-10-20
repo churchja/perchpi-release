@@ -1827,6 +1827,40 @@ EOF
     # session and nothing else. B4 ALSO writes a tty1 console autologin drop-in; a
     # console autologin on tty1 is what fed LIVE's getty->labwc restart loop (S9).
     sudo rm -f /etc/systemd/system/getty@tty1.service.d/autologin.conf
+    # D-S23c-1 (perchpi:s23d-kiosk-guard-v1): on a FLASHED image the Imager user is created at
+    # first boot by Raspberry Pi OS's userconf, after this function ran; its cancel-rename
+    # step re-runs raspi-config B3/B4 for that user and undoes the two steps above. The
+    # guard re-asserts them on every boot, after cloud-init's local stage (where the
+    # rename happens) and before lightdm. Quoted heredocs: the files ship verbatim.
+    sudo tee /usr/local/sbin/perchpi-kiosk-guard >/dev/null <<'PERCHPI_GUARD_EOF'
+#!/bin/sh
+# perchpi:s23d-kiosk-guard-v1 (D-S23c-1). Installed by newinstaller.sh first_boot_display.
+# On the first boot of a flashed image, Raspberry Pi OS's userconf renames the uid-1000
+# account to the Imager user, then runs cancel-rename, which re-runs raspi-config's boot
+# behaviour for that user (B3: autologin off, B4: autologin as them). The kiosk is birder's
+# lightdm autologin session (spec 12.9), so put it back on every boot. Idempotent.
+[ -f /etc/lightdm/lightdm.conf ] || exit 0
+sed -i -E 's/^#?autologin-user=.*/autologin-user=birder/' /etc/lightdm/lightdm.conf
+rm -f /etc/systemd/system/getty@tty1.service.d/autologin.conf
+PERCHPI_GUARD_EOF
+    sudo chmod 755 /usr/local/sbin/perchpi-kiosk-guard
+    sudo tee /etc/systemd/system/perchpi-kiosk-guard.service >/dev/null <<'PERCHPI_GUARD_EOF'
+# perchpi:s23d-kiosk-guard-v1 (D-S23c-1). Runs after cloud-init's local stage (where
+# Raspberry Pi OS renames the Imager user) and before lightdm starts the kiosk session.
+[Unit]
+Description=PerchPi kiosk guard: keep lightdm autologin on birder
+After=cloud-init-local.service
+Before=display-manager.service lightdm.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/perchpi-kiosk-guard
+
+[Install]
+WantedBy=graphical.target
+PERCHPI_GUARD_EOF
+    sudo systemctl daemon-reload
+    sudo systemctl enable perchpi-kiosk-guard.service
 
     # RTK CX101 panel returns 0-byte EDID; force audio over HDMI anyway.
     if ! grep -q '^hdmi_force_edid_audio=1' /boot/firmware/config.txt; then
