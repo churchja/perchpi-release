@@ -45,6 +45,7 @@ Imager verifies the written image against its sha256 by itself. For a manual dow
 - The Perch geomodel is on by default.
 - Imager's first-boot settings, including your password hash, stay in `/boot/firmware/user-data` on the card, as on any Raspberry Pi OS card written by Imager.
 - `newinstaller.sh` (the from-scratch installer this image was built with) has no error trap: when a step fails it exits without a message, so check its log.
+- The species-image API (`/api/v1/image/…`, which notifications use for bird photos) answers without a password to anyone who can reach the station. It returns only public Wikipedia image details, but a caller can make the station fetch from Wikipedia and add entries to its image cache. A password gate, which still lets the station itself through, is planned for v1.1.
 
 ## What's different from BirdNET-Pi
 
