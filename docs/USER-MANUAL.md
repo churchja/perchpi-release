@@ -5,6 +5,8 @@ https://github.com/churchja/perchpi-release/blob/main/docs/SETUP-GUIDE.md
 
 Questions or problems? Email **perchpi@shadyacres.my**.
 
+**Prefer paper?** The illustrated, printable guide: [PerchPi-Guide.pdf](https://github.com/churchja/perchpi-release/blob/main/docs/PerchPi-Guide.pdf)
+
 
 ## How PerchPi works, in one minute
 
@@ -17,6 +19,8 @@ Questions or problems? Email **perchpi@shadyacres.my**.
 
 ## Opening PerchPi
 
+![The Overview page, with numbered callouts](images/annot.jpg)
+
 On any phone, tablet, or computer on the same Wi-Fi as the station, open a web browser and go to `http://<your-hostname>.local/`, for example `http://perchpi.local/`. The page title says BirdNET-Pi; that's normal.
 
 Tip: on a phone, add the page to your home screen so it opens like an app.
@@ -28,17 +32,28 @@ Most pages ask for the **web login** the first time you open them, and your brow
 
 The menu runs down the left side. On a phone, tap the menu button (three lines) at the top left to open it.
 
+<img src="images/phone-menu.jpg" width="300" alt="The menu on a phone"> <img src="images/zoom-gear-menu.jpg" width="200" alt="The gear menu">
+
 ### Activity
 - **Overview:** the home page. It shows the latest bird, today's totals, and recent detections. Tap a bird to hear it.
 - **Birds Today:** every species heard today, with counts and times.
 - **All Species:** every species the station has ever heard.
 - **Spectrogram:** a live picture of what the microphone hears right now. Bird songs show up as marks and streaks.
 
+![Birds Today](images/birds-today.jpg)
+*Birds Today: every species heard today (example data).*
+
+![A bird's page](images/species-cardinal.jpg)
+*Tap any bird for its detections by time of day.*
+
 ### Library
 - **Best Recordings:** the clearest recording of each species.
 - **Recordings:** every saved recording, by date and species.
 - **Species Stats:** per-species counts, first and last heard, and activity over time.
 - **Quarantine:** detections held back because the bird is unlikely for your place and time of year. See "Reviewing Quarantine" below.
+
+![Species Stats](images/species-stats.jpg)
+*Species Stats: each species with its best recording's spectrogram. The bright marks are the song.*
 
 ### Charts
 - **Daily Charts:** when each species was active through the day.
@@ -63,12 +78,16 @@ On the settings pages, **scroll down** to the section you want, and click **Upda
 
 ## The touchscreen
 
+![The touchscreen Overview](images/kiosk-overview.jpg)
+
 With a screen attached, PerchPi shows the Overview full-screen from the moment it starts. Tap a bird to see it and play its song. The touchscreen is for watching and listening; use a phone or computer to change settings.
 
 
 ## Reviewing Quarantine
 
 PerchPi quarantines detections of birds that are very unlikely at your location in the current week. Most are mistakes, for example a similar-sounding bird or a noise. Some are real rarities.
+
+![Quarantine with two detections to review](images/quarantine.jpg)
 
 Open **Quarantine**, play the recording, and decide:
 - **Unhide** if it really is that bird. It moves into your normal lists.
@@ -103,6 +122,8 @@ A 64 GB or larger card gives plenty of room. You can change the 45 days under ge
 
 
 ## Turning PerchPi off and on
+
+<img src="images/zoom-system-controls.jpg" width="240" alt="System Controls">
 
 - **Never just pull the plug while it's running.** That can damage the memory card.
 - **To turn it off:** gear → **System Controls** → **Shutdown**. Wait about 30 seconds, until the light on the Pi stops blinking green, then unplug it.
@@ -146,6 +167,8 @@ Email **perchpi@shadyacres.my**. Include:
 - and, if you can, a copy of **View Log** from the menu.
 
 PerchPi is a hobby project maintained by one person, so allow a few days for a reply.
+
+*Screens in this manual show example data. Northern Cardinal photo: U.S. Geological Survey, Columbia Environmental Research Center (public domain).*
 
 
 ## About PerchPi

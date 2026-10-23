@@ -2,6 +2,8 @@
 
 A small 3D-printed hood that holds the Clippy EM272 microphone and shields it from rain and wind. It's the hood used on the developer's station.
 
+![The hood, from the front and the back](hood-views.jpg)
+
 | File | Use |
 |---|---|
 | `PerchPi_EM272_Hood_as-printed.3mf` | Open in Bambu Studio, PrusaSlicer or OrcaSlicer. |

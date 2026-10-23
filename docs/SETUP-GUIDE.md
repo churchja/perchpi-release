@@ -6,6 +6,11 @@ This guide takes you from a box of parts to your first detected bird. Plan on ab
 
 Need help at any point? Email **perchpi@shadyacres.my**.
 
+**Prefer paper?** The same guide with pictures, ready to print: [PerchPi-Guide.pdf](https://github.com/churchja/perchpi-release/blob/main/docs/PerchPi-Guide.pdf)
+
+![PerchPi on its touchscreen, showing a Northern Cardinal as the latest bird](images/kiosk-overview.jpg)
+*PerchPi's Overview page (example data).*
+
 
 ## Quick start (if you've used a Raspberry Pi before)
 
@@ -21,6 +26,8 @@ Need help at any point? Email **perchpi@shadyacres.my**.
 ## 1. What you need
 
 ### Strongly recommended: the exact parts PerchPi is built and tested with
+
+![The parts you need](images/parts.jpg)
 
 > **⚠ WARNING: use this microphone and this adapter.**
 > PerchPi was tuned and tested with the Clippy EM272 microphone plugged into the UGREEN US205 USB sound adapter. With a different microphone, bird detection may be **severely degraded or nearly useless**. PerchPi v1 is also pre-set for the UGREEN US205; with a different USB adapter, the station may **record nothing at all**.
@@ -50,6 +57,8 @@ Need help at any point? Email **perchpi@shadyacres.my**.
 
 ## 2. Put the hardware together
 
+![How it connects](images/wiring.jpg)
+
 1. **Fit the cooler.** Peel the protective film off the cooler's thermal pads. Line its two spring-loaded pins up with the matching holes in the Pi and press until they click. Plug the cooler's small cable into the 4-pin socket labelled **FAN**.
 2. **Connect the microphone.** Plug the Clippy into the **red** (microphone) jack of the UGREEN adapter. It must go in the red jack, not the green one. Then plug the adapter into any USB port on the Pi.
 3. **Touchscreen (optional).** Connect it to the Pi's micro-HDMI socket closest to the power socket (HDMI 0). Connect its touch cable to a USB port, following the screen's own instructions.
@@ -67,6 +76,8 @@ Raspberry Pi Imager is the free program that writes PerchPi onto the memory card
 ## 4. Point Imager at PerchPi
 
 PerchPi isn't in Imager's built-in list, so you tell Imager where to find it.
+
+![The four clicks in Raspberry Pi Imager (illustration)](images/imager-repo.jpg)
 
 ### Recommended: through Imager's menus (works on every computer)
 
@@ -100,6 +111,8 @@ To go back to Raspberry Pi's normal list later, open **App Options → Content R
 
 ## 5. Write the memory card
 
+![Choose, customise, write (illustration)](images/imager-write.jpg)
+
 1. Put the microSD card in your computer.
 2. In Imager, choose:
    - **Device:** Raspberry Pi 5
@@ -117,6 +130,8 @@ To go back to Raspberry Pi's normal list later, open **App Options → Content R
 
 
 ## 6. First start
+
+![First start](images/firststart.jpg)
 
 1. Turn the Pi over. Slide the microSD card into the slot on the underside, **metal contacts facing the Pi** (label facing away), until it stops.
 2. Make sure the microphone adapter is plugged in.
@@ -144,6 +159,12 @@ Most pages ask for the **web login** the first time you open them. Your browser 
 
 This is **not** the username and password you typed in Imager.
 
+![Two different logins](images/logins.jpg)
+
+<img src="images/phone-overview.jpg" width="320" alt="PerchPi on a phone">
+
+*PerchPi on a phone (example data).*
+
 **If the address doesn't open:**
 - Wait a few more minutes. The first start takes a while.
 - Make sure your phone or computer is on the same Wi-Fi as the Pi.
@@ -155,10 +176,14 @@ This is **not** the username and password you typed in Imager.
 The **gear icon** at the top right of every page opens the settings menu. On the settings pages, **scroll down** to find each section, and click **Update Settings** at the bottom of the page to save.
 
 1. **Change the web password** (important). Gear → **Advanced Settings**. Scroll down to **BirdNET-Pi Password**. Delete everything in the box, then type a new password using **only letters and numbers**. Click **Update Settings**. Your browser asks you to log in again: use `birdnet` and your new password. Write it down.
+
+   ![The BirdNET-Pi Password box](images/zoom-password.jpg)
 2. **Set your location.** Gear → **Settings**. Scroll down to **Location**.
    - To find your numbers, open Google Maps on a computer and right-click your house. The first line of the menu shows two numbers, for example `40.71278, -74.00601`.
    - Delete what's in **Latitude** and type the **first** number. Delete what's in **Longitude** and type the **second** number. Keep the minus sign, and use at most **4 digits after the decimal point**, for example `40.7128` and `-74.0060`.
    - Click **Update Settings**.
+
+   ![Settings → Location, shown with the default location](images/zoom-location.jpg)
    - Until you do this, PerchPi uses a location in New York State, so its bird suggestions and weather are wrong.
 3. **Check the time zone.** Gear → **Settings**. Scroll down to **Time and Date**. It should already match what you chose in Imager.
 

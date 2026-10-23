@@ -6,7 +6,17 @@ A bird audio detection and identification station for the Raspberry Pi 5, derive
 
 **v1** is the first public release: a ready-to-flash Raspberry Pi OS (trixie) image for the Raspberry Pi 5. It is a hobby project maintained by one person; expect rough edges (see Known issues).
 
-**New here? Start with the [Setup Guide](docs/SETUP-GUIDE.md).** It goes step by step from a box of parts to your first detected bird. For everyday use, see the [User Manual](docs/USER-MANUAL.md). Help: **perchpi@shadyacres.my**.
+![PerchPi's Overview page on its touchscreen, with a Northern Cardinal as the latest bird](docs/images/kiosk-overview.jpg)
+
+## Documentation
+
+New here? Start with the Setup Guide. It goes step by step from a box of parts to your first detected bird.
+
+- **Setup Guide:** https://github.com/churchja/perchpi-release/blob/main/docs/SETUP-GUIDE.md
+- **User Manual:** https://github.com/churchja/perchpi-release/blob/main/docs/USER-MANUAL.md
+- **Printable guide with pictures (PDF):** https://github.com/churchja/perchpi-release/blob/main/docs/PerchPi-Guide.pdf
+- **Microphone hood files (STL and 3MF):** https://github.com/churchja/perchpi-release/tree/main/hardware/em272-hood
+- **Help:** perchpi@shadyacres.my
 
 ## Hardware
 
