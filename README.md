@@ -12,6 +12,10 @@ A bird audio detection and identification station for the Raspberry Pi 5, derive
 
 New here? Start with the Setup Guide. It goes step by step from a box of parts to your first detected bird.
 
+**Prefer to watch?** The setup video (4½ min) walks through the same steps, read aloud. Click to play:
+
+[![PerchPi setup video: from a box of parts to your first bird (4:39)](docs/images/setup-video-poster.jpg)](https://youtu.be/5rh6dXutpfg)
+
 - **Setup Guide:** https://github.com/churchja/perchpi-release/blob/main/docs/SETUP-GUIDE.md
 - **User Manual:** https://github.com/churchja/perchpi-release/blob/main/docs/USER-MANUAL.md
 - **Printable guide with pictures (PDF):** https://github.com/churchja/perchpi-release/blob/main/docs/PerchPi-Guide.pdf
