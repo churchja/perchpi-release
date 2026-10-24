@@ -2,6 +2,10 @@
 
 A bird audio detection and identification station for the Raspberry Pi 5, derived from [BirdNET-Pi](https://github.com/Nachtzuster/BirdNET-Pi). It listens through a USB microphone, identifies birds with BirdNET and Google's Perch model, and shows them on a web UI and an optional touchscreen kiosk.
 
+**New here? Watch the setup video first.** In 4½ minutes it goes from a box of parts to your first detected bird. Click to play:
+
+[![PerchPi setup video: from a box of parts to your first bird (4:39)](docs/images/setup-video-poster.jpg)](https://youtu.be/5rh6dXutpfg)
+
 ## Status
 
 **v1** is the first public release: a ready-to-flash Raspberry Pi OS (trixie) image for the Raspberry Pi 5. It is a hobby project maintained by one person; expect rough edges (see Known issues).
@@ -10,12 +14,9 @@ A bird audio detection and identification station for the Raspberry Pi 5, derive
 
 ## Documentation
 
-New here? Start with the Setup Guide. It goes step by step from a box of parts to your first detected bird.
+Prefer to read? The Setup Guide goes step by step from a box of parts to your first detected bird.
 
-**Prefer to watch?** The setup video (4½ min) walks through the same steps, read aloud. Click to play:
-
-[![PerchPi setup video: from a box of parts to your first bird (4:39)](docs/images/setup-video-poster.jpg)](https://youtu.be/5rh6dXutpfg)
-
+- **Setup video (4½ min):** https://youtu.be/5rh6dXutpfg
 - **Setup Guide:** https://github.com/churchja/perchpi-release/blob/main/docs/SETUP-GUIDE.md
 - **User Manual:** https://github.com/churchja/perchpi-release/blob/main/docs/USER-MANUAL.md
 - **Printable guide with pictures (PDF):** https://github.com/churchja/perchpi-release/blob/main/docs/PerchPi-Guide.pdf
