@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>PerchPi — New User Audio Companion</title>
+<style>
+  :root{
+    --bg:#f2f5ec;
+    --bg-grad-1:#e9f0dd;
+    --bg-grad-2:#f7f3e4;
+    --surface:#ffffff;
+    --surface-2:#eef3e4;
+    --ink:#1c2b1e;
+    --ink-soft:#47604c;
+    --line:#d3ddc6;
+    --pine:#173d27;
+    --pine-2:#1f5136;
+    --moss:#3e7d4e;
+    --amber:#c97e16;
+    --amber-bright:#e9a83b;
+    --amber-soft:#fbf0d7;
+    --sky:#dcebf2;
+    --playing-bg:#e7f0da;
+    --shadow:0 10px 30px rgba(23,61,39,.14);
+    --radius:16px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0e1a12;
+      --bg-grad-1:#0c1710;
+      --bg-grad-2:#14231a;
+      --surface:#182a1e;
+      --surface-2:#1e3325;
+      --ink:#e9f2e4;
+      --ink-soft:#a9c2a6;
+      --line:#2c4634;
+      --pine:#0f2c1b;
+      --pine-2:#173d27;
+      --moss:#6fae7c;
+      --amber:#e9a83b;
+      --amber-bright:#f2bc55;
+      --amber-soft:#3a2f16;
+      --sky:#1d3038;
+      --playing-bg:#223d2b;
+      --shadow:0 10px 30px rgba(0,0,0,.45);
+    }
+  }
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0;
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color:var(--ink);
+    background:linear-gradient(180deg, var(--bg-grad-1) 0%, var(--bg) 340px, var(--bg) 100%);
+    min-height:100vh;
+  }
+  .wrap{ max-width:760px; margin:0 auto; padding:0 16px 56px; }
+
+  /* ---------- Header ---------- */
+  header{ padding:30px 4px 18px; }
+  .kicker{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:.78rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--moss);
+  }
+  .kicker svg{ width:20px; height:20px; flex:none; }
+  h1{
+    font-family:Georgia, "Iowan Old Style", "Times New Roman", serif;
+    font-weight:700; font-size:clamp(1.75rem, 5.4vw, 2.5rem);
+    line-height:1.12; margin:.45em 0 .3em; color:var(--ink);
+  }
+  h1 .accent{ color:var(--amber); }
+  .meta{ color:var(--ink-soft); font-size:.98rem; line-height:1.5; margin:0; }
+  .tagline{
+    margin:14px 0 0; font-size:1.08rem; line-height:1.5;
+    font-family:Georgia, "Iowan Old Style", serif; font-style:italic;
+    color:var(--pine-2);
+    border-left:3px solid var(--amber-bright); padding-left:12px;
+  }
+  @media (prefers-color-scheme: dark){ .tagline{ color:var(--amber-bright); } }
+
+  /* ---------- Sticky player ---------- */
+  .player{
+    position:sticky; top:10px; z-index:20;
+    background:linear-gradient(160deg, var(--pine) 0%, var(--pine-2) 78%);
+    color:#f3f7ec; border-radius:20px; padding:16px 18px 14px;
+    box-shadow:var(--shadow);
+    margin:10px 0 22px;
+  }
+  .np-label{ font-size:.7rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:#bcd6ae; margin:0 0 3px; }
+  .np-title{
+    font-family:Georgia, "Iowan Old Style", serif; font-size:1.18rem; font-weight:700;
+    line-height:1.25; margin:0 0 10px; min-height:1.5em;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .seekrow{ display:flex; align-items:center; gap:10px; }
+  .time{ font-variant-numeric:tabular-nums; font-size:.85rem; color:#d8e8cc; min-width:42px; }
+  .time.right{ text-align:right; }
+  input[type="range"]{
+    -webkit-appearance:none; appearance:none; flex:1; height:26px; background:transparent; cursor:pointer; margin:0;
+  }
+  input[type="range"]::-webkit-slider-runnable-track{ height:6px; border-radius:3px; background:linear-gradient(90deg, var(--amber-bright) var(--fill,0%), rgba(255,255,255,.28) var(--fill,0%)); }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:20px; height:20px; border-radius:50%;
+    background:#fff; border:3px solid var(--amber-bright); margin-top:-7px;
+    box-shadow:0 1px 5px rgba(0,0,0,.35);
+  }
+  input[type="range"]::-moz-range-track{ height:6px; border-radius:3px; background:rgba(255,255,255,.28); }
+  input[type="range"]::-moz-range-progress{ height:6px; border-radius:3px; background:var(--amber-bright); }
+  input[type="range"]::-moz-range-thumb{ width:14px; height:14px; border-radius:50%; background:#fff; border:3px solid var(--amber-bright); }
+  .controls{ display:flex; align-items:center; justify-content:space-between; gap:6px; margin-top:8px; }
+  .cbtn{
+    appearance:none; border:0; background:rgba(255,255,255,.10); color:#f3f7ec;
+    width:52px; height:52px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;
+    cursor:pointer; flex:none; -webkit-tap-highlight-color:transparent;
+  }
+  .cbtn:active{ background:rgba(255,255,255,.22); }
+  .cbtn svg{ width:24px; height:24px; }
+  .cbtn .skipnum{ font-size:.62rem; font-weight:800; }
+  .playbtn{
+    width:68px; height:68px; background:var(--amber-bright); color:#2a1c04;
+    box-shadow:0 4px 14px rgba(0,0,0,.3);
+  }
+  .playbtn:active{ background:var(--amber-bright); filter:brightness(1.08); }
+  .playbtn svg{ width:32px; height:32px; }
+  .speedwrap{ display:flex; align-items:center; gap:6px; flex:none; }
+  .speedwrap label{ font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#bcd6ae; }
+  select#speed{
+    appearance:none; -webkit-appearance:none;
+    background:rgba(255,255,255,.12); color:#f3f7ec; border:1px solid rgba(255,255,255,.25);
+    font-size:1rem; font-weight:700; border-radius:12px; padding:12px 30px 12px 12px; min-height:52px; cursor:pointer;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23f3f7ec' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 10px center;
+  }
+  select#speed option{ color:#1c2b1e; }
+  .fallback-note{
+    display:none; margin:10px 2px 0; font-size:.85rem; line-height:1.45; color:#ffe1a6;
+  }
+  .fallback-note.show{ display:block; }
+
+  /* ---------- Track list ---------- */
+  .listhead{
+    display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+    margin:26px 4px 10px;
+  }
+  .listhead h2{
+    font-family:Georgia, "Iowan Old Style", serif; font-size:1.25rem; margin:0;
+  }
+  .listhead span{ color:var(--ink-soft); font-size:.88rem; }
+  ul.tracks{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  li.track{
+    display:flex; align-items:stretch; gap:0;
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden;
+  }
+  li.track.playing{ background:var(--playing-bg); border-color:var(--moss); box-shadow:0 0 0 1px var(--moss); }
+  .track-main{
+    flex:1; min-width:0; display:flex; align-items:center; gap:14px;
+    padding:16px 6px 16px 16px; cursor:pointer; -webkit-tap-highlight-color:transparent;
+    background:none; border:0; text-align:left; color:inherit; font:inherit;
+  }
+  .num{
+    flex:none; width:46px; height:46px; border-radius:50%;
+    background:var(--surface-2); color:var(--pine-2);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:.95rem; font-variant-numeric:tabular-nums;
+  }
+  @media (prefers-color-scheme: dark){ .num{ color:var(--amber-bright); } }
+  li.track.playing .num{ background:var(--pine-2); color:#fff; }
+  .num .eq{ display:none; align-items:flex-end; gap:2.5px; height:16px; }
+  .num .eq i{ width:3.5px; background:currentColor; border-radius:2px; animation:eq 0.9s ease-in-out infinite; }
+  .num .eq i:nth-child(1){ height:9px; }
+  .num .eq i:nth-child(2){ height:15px; animation-delay:.18s; }
+  .num .eq i:nth-child(3){ height:7px; animation-delay:.36s; }
+  li.track.playing.is-playing .num .numtxt{ display:none; }
+  li.track.playing.is-playing .num .eq{ display:flex; }
+  @keyframes eq{ 0%,100%{ transform:scaleY(.55);} 50%{ transform:scaleY(1);} }
+  @media (prefers-reduced-motion: reduce){ .num .eq i{ animation:none; } }
+  .ttext{ min-width:0; }
+  .ttitle{ font-weight:700; font-size:1.05rem; line-height:1.3; margin:0; }
+  .tdesc{ color:var(--ink-soft); font-size:.9rem; line-height:1.45; margin:3px 0 0; }
+  .tdur{
+    flex:none; font-variant-numeric:tabular-nums; font-weight:700; font-size:.92rem;
+    color:var(--ink-soft); padding:16px 4px 16px 0; align-self:center;
+  }
+  .dl{
+    flex:none; align-self:center; margin-right:10px;
+    width:48px; height:48px; border-radius:50%;
+    display:inline-flex; align-items:center; justify-content:center;
+    color:var(--moss); background:var(--surface-2); text-decoration:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .dl:active{ filter:brightness(.95); }
+  .dl svg{ width:22px; height:22px; }
+  li.track.complete{ background:linear-gradient(150deg, var(--pine) 0%, var(--pine-2) 85%); border-color:var(--pine); color:#f3f7ec; }
+  li.track.complete .tdesc{ color:#cfe2c0; }
+  li.track.complete .tdur{ color:#ffe1a6; }
+  li.track.complete .num{ background:var(--amber-bright); color:#2a1c04; font-size:.72rem; letter-spacing:.02em; }
+  li.track.complete.playing{ box-shadow:0 0 0 2px var(--amber-bright); }
+  li.track.complete.playing .num{ background:var(--amber-bright); color:#2a1c04; }
+  li.track.complete .dl{ background:rgba(255,255,255,.14); color:#f3f7ec; }
+
+  /* ---------- Footer ---------- */
+  .script-card{
+    margin-top:26px; background:var(--amber-soft); border:1px solid var(--line);
+    border-radius:var(--radius); padding:18px;
+    display:flex; gap:14px; align-items:center; flex-wrap:wrap;
+  }
+  .script-card .stext{ flex:1; min-width:220px; }
+  .script-card h3{ margin:0 0 4px; font-family:Georgia, "Iowan Old Style", serif; font-size:1.08rem; }
+  .script-card p{ margin:0; color:var(--ink-soft); font-size:.92rem; line-height:1.5; }
+  .script-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--pine-2); color:#fff; text-decoration:none; font-weight:700;
+    padding:14px 18px; border-radius:12px; min-height:52px;
+  }
+  .script-btn svg{ width:20px; height:20px; }
+  .fineprint{ margin:22px 4px 0; color:var(--ink-soft); font-size:.85rem; line-height:1.55; }
+
+  /* Narrow screens: transport buttons on one row, speed selector wraps
+     onto its own full-width row so it is always visible and tappable. */
+  @media (max-width: 600px){
+    .player{ padding:14px 14px 12px; }
+    .controls{ flex-wrap:wrap; justify-content:center; row-gap:10px; column-gap:8px; }
+    .cbtn{ width:48px; height:48px; }
+    .playbtn{ width:64px; height:64px; }
+    .speedwrap{ width:100%; justify-content:center; }
+    select#speed{ min-height:48px; }
+    .np-title{ white-space:normal; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="kicker">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.5 12.6c-2.9.4-5-1-6.8-2.9C12.2 8.1 10.6 6 7.4 5.7 5.3 5.5 3.6 6.6 3 8c-.5 1.3 0 2.8.9 4.1-.7.3-1.2.9-1.4 1.7 1 .5 2.1.5 3.1.1.5 1.9 2 3.3 4 3.8-.3.9-.4 1.9-.2 2.9.9-1 1.9-2 3-2.7 1.6 0 3-.6 4-1.8 1.4-1.6 3.4-3.4 3.1-3.5Z" fill="currentColor" opacity=".9"/><circle cx="7.6" cy="9.4" r="1.1" fill="var(--bg)"/></svg>
+      PerchPi Audiobook
+    </span>
+    <h1>PerchPi — New User <span class="accent">Audio Companion</span></h1>
+    <p class="meta">A supplement to the Setup Guide &amp; User Manual · 5 chapters · 14 minutes 50 seconds total</p>
+    <p class="tagline">New to PerchPi? Press play — from a box of parts to your first detected bird.</p>
+  </header>
+
+  <section class="player" aria-label="Audio player">
+    <p class="np-label" id="npLabel">Now playing</p>
+    <p class="np-title" id="npTitle">Complete Audiobook</p>
+    <div class="seekrow">
+      <span class="time" id="tElapsed">0:00</span>
+      <input type="range" id="seek" min="0" max="1000" value="0" step="1" aria-label="Seek" />
+      <span class="time right" id="tTotal">14:50</span>
+    </div>
+    <div class="controls">
+      <button class="cbtn" id="btnPrev" aria-label="Previous chapter">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2.4v14H6zM19 5.8v12.4c0 .9-1 1.5-1.8 1L8.6 13a1.2 1.2 0 0 1 0-2L17.2 4.9c.8-.6 1.8 0 1.8.9Z"/></svg>
+      </button>
+      <button class="cbtn" id="btnBack" aria-label="Back 15 seconds">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 4.5A7.5 7.5 0 1 1 4.5 12c0-.5.4-.9.9-.9s.9.4.9.9A5.7 5.7 0 1 0 12 6.3v3L6.9 5.6a.6.6 0 0 1 0-1L12 1.6v2.9Z" transform="translate(0 2)"/></svg>
+      </button>
+      <button class="cbtn playbtn" id="btnPlay" aria-label="Play">
+        <svg id="icoPlay" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.3v13.4c0 .9 1 1.5 1.8 1L20 13a1.15 1.15 0 0 0 0-2L9.8 4.4C9 3.9 8 4.4 8 5.3Z"/></svg>
+        <svg id="icoPause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none"><path d="M7 4.8c0-.7.5-1.3 1.2-1.3h1.6c.7 0 1.2.6 1.2 1.3v14.4c0 .7-.5 1.3-1.2 1.3H8.2c-.7 0-1.2-.6-1.2-1.3V4.8ZM13 4.8c0-.7.5-1.3 1.2-1.3h1.6c.7 0 1.2.6 1.2 1.3v14.4c0 .7-.5 1.3-1.2 1.3h-1.6c-.7 0-1.2-.6-1.2-1.3V4.8Z"/></svg>
+      </button>
+      <button class="cbtn" id="btnFwd" aria-label="Forward 30 seconds">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 4.5A7.5 7.5 0 1 0 19.5 12c0-.5-.4-.9-.9-.9s-.9.4-.9.9A5.7 5.7 0 1 1 12 6.3v3l5.1-3.7a.6.6 0 0 0 0-1L12 1.6v2.9Z" transform="translate(0 2)"/></svg>
+      </button>
+      <button class="cbtn" id="btnNext" aria-label="Next chapter">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.6 5H18v14h-2.4zM5 5.8v12.4c0 .9 1 1.5 1.8 1L15.4 13a1.2 1.2 0 0 0 0-2L6.8 4.9C6 4.3 5 4.9 5 5.8Z"/></svg>
+      </button>
+      <div class="speedwrap">
+        <label for="speed">Speed</label>
+        <select id="speed" aria-label="Playback speed">
+          <option value="0.75">0.75×</option>
+          <option value="1" selected>1×</option>
+          <option value="1.25">1.25×</option>
+          <option value="1.5">1.5×</option>
+          <option value="1.75">1.75×</option>
+          <option value="2">2×</option>
+        </select>
+      </div>
+    </div>
+    <p class="fallback-note" id="fallbackNote">The complete file didn’t load, so the player is playing the same book chapter by chapter instead — nothing is missing.</p>
+  </section>
+
+  <div class="listhead">
+    <h2>Listen</h2>
+    <span>Tap a chapter to play it</span>
+  </div>
+
+  <ul class="tracks" id="trackList"></ul>
+
+  <div class="script-card">
+    <div class="stext">
+      <h3>Prefer to read along?</h3>
+      <p>Download the full written script of this audiobook — every word, chapter by chapter — to keep with your Setup Guide and User Manual.</p>
+    </div>
+    <a class="script-btn" href="assets/PerchPi%20-%20Audiobook%20Script.md" download="PerchPi - Audiobook Script.md">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3a1 1 0 0 1 1 1v10.2l3.3-3.3a1 1 0 1 1 1.4 1.4l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.4L11 14.2V4a1 1 0 0 1 1-1ZM4 19a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1Z"/></svg>
+      Full script (.md)
+    </a>
+  </div>
+
+  <p class="fineprint">Where anything in this audio differs in detail from the written guides, the guides win — they carry the pictures, the custom Imager address, and the exact words to type. Headphones or the car speakers both work well; your steering-wheel and Bluetooth controls work through the player too.</p>
+
+</div>
+
+<audio id="audio" preload="metadata"></audio>
+
+<script>
+(function(){
+  "use strict";
+
+  var TRACKS = [
+    { id:"complete", num:"ALL", title:"Complete Audiobook", short:"Complete Audiobook",
+      desc:"The whole companion in one file — all five chapters, start to finish.",
+      src:"assets/PerchPi%20-%20New%20User%20Companion%20-%20Complete.mp3", dur:890, durLabel:"14:50", file:"PerchPi - New User Companion - Complete.mp3" },
+    { id:"ch1", num:"01", title:"Welcome — What PerchPi Is", short:"Ch. 1 · Welcome",
+      desc:"What PerchPi is, how it listens and names birds, and why your recordings stay in your house.",
+      src:"assets/01%20-%20Welcome%20-%20What%20PerchPi%20Is.mp3", dur:130, durLabel:"2:10", file:"01 - Welcome - What PerchPi Is.mp3" },
+    { id:"ch2", num:"02", title:"Before You Start — The Parts That Matter", short:"Ch. 2 · Before You Start",
+      desc:"The Pi, cooler, card and power supply — and the one microphone and adapter to buy exactly.",
+      src:"assets/02%20-%20Before%20You%20Start%20-%20The%20Parts%20That%20Matter.mp3", dur:118, durLabel:"1:58", file:"02 - Before You Start - The Parts That Matter.mp3" },
+    { id:"ch3", num:"03", title:"Setup, Step by Step", short:"Ch. 3 · Setup, Step by Step",
+      desc:"Assemble the hardware, write the card, first start, and the three settings to change right away.",
+      src:"assets/03%20-%20Setup%20Step%20by%20Step.mp3", dur:245, durLabel:"4:05", file:"03 - Setup Step by Step.mp3" },
+    { id:"ch4", num:"04", title:"Every Day with PerchPi", short:"Ch. 4 · Every Day with PerchPi",
+      desc:"Overview, Birds Today, your life list, Live Audio — and the Quarantine habit worth building.",
+      src:"assets/04%20-%20Every%20Day%20with%20PerchPi.mp3", dur:170, durLabel:"2:50", file:"04 - Every Day with PerchPi.mp3" },
+    { id:"ch5", num:"05", title:"Golden Rules, and When Something Seems Wrong", short:"Ch. 5 · Golden Rules",
+      desc:"Safe shutdown, microphone placement, the red-button warnings, backups, and the three common troubles.",
+      src:"assets/05%20-%20Golden%20Rules%20and%20When%20Something%20Seems%20Wrong.mp3", dur:227, durLabel:"3:47", file:"05 - Golden Rules and When Something Seems Wrong.mp3" }
+  ];
+
+  var audio = document.getElementById("audio");
+  var listEl = document.getElementById("trackList");
+  var npLabel = document.getElementById("npLabel");
+  var npTitle = document.getElementById("npTitle");
+  var tElapsed = document.getElementById("tElapsed");
+  var tTotal = document.getElementById("tTotal");
+  var seek = document.getElementById("seek");
+  var btnPlay = document.getElementById("btnPlay");
+  var icoPlay = document.getElementById("icoPlay");
+  var icoPause = document.getElementById("icoPause");
+  var speedSel = document.getElementById("speed");
+  var fallbackNote = document.getElementById("fallbackNote");
+
+  var current = 0;          // index into TRACKS
+  var seeking = false;
+  var chainMode = false;    // true when complete file failed and we chain chapters
+
+  var DL_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3a1 1 0 0 1 1 1v10.2l3.3-3.3a1 1 0 1 1 1.4 1.4l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.4L11 14.2V4a1 1 0 0 1 1-1ZM4 19a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1Z"/></svg>';
+
+  // Build the track list
+  TRACKS.forEach(function(tr, i){
+    var li = document.createElement("li");
+    li.className = "track" + (tr.id === "complete" ? " complete" : "");
+    li.id = "row-" + tr.id;
+
+    var main = document.createElement("button");
+    main.type = "button";
+    main.className = "track-main";
+    main.setAttribute("aria-label", "Play " + tr.title);
+    main.innerHTML =
+      '<span class="num"><span class="numtxt">' + tr.num + '</span>' +
+      '<span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></span>' +
+      '<span class="ttext"><span class="ttitle">' + tr.title + '</span>' +
+      '<span class="tdesc" style="display:block">' + tr.desc + '</span></span>';
+    main.addEventListener("click", function(){
+      if (current === i && audio.src) { togglePlay(); }
+      else { loadTrack(i, true); }
+    });
+
+    var dur = document.createElement("span");
+    dur.className = "tdur";
+    dur.textContent = tr.durLabel;
+
+    var dl = document.createElement("a");
+    dl.className = "dl";
+    dl.href = tr.src;
+    dl.setAttribute("download", tr.file);
+    dl.setAttribute("aria-label", "Download " + tr.title);
+    dl.innerHTML = DL_SVG;
+
+    li.appendChild(main);
+    li.appendChild(dur);
+    li.appendChild(dl);
+    listEl.appendChild(li);
+  });
+
+  function fmt(s){
+    if (!isFinite(s) || s < 0) s = 0;
+    s = Math.round(s);
+    var m = Math.floor(s / 60), r = s % 60;
+    return m + ":" + (r < 10 ? "0" : "") + r;
+  }
+
+  function trackDuration(){
+    return (isFinite(audio.duration) && audio.duration > 0) ? audio.duration : TRACKS[current].dur;
+  }
+
+  function updateRows(){
+    TRACKS.forEach(function(tr, i){
+      var row = document.getElementById("row-" + tr.id);
+      if (!row) return;
+      row.classList.toggle("playing", i === current);
+      row.classList.toggle("is-playing", i === current && !audio.paused);
+    });
+  }
+
+  function updateMediaSession(){
+    if (!("mediaSession" in navigator)) return;
+    var tr = TRACKS[current];
+    try {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: tr.title,
+        artist: "PerchPi — New User Audio Companion",
+        album: "PerchPi — New User Audio Companion"
+      });
+    } catch(e) {}
+  }
+
+  function loadTrack(i, autoplay){
+    current = i;
+    var tr = TRACKS[i];
+    audio.src = tr.src;
+    audio.playbackRate = parseFloat(speedSel.value) || 1;
+    npLabel.textContent = tr.id === "complete" ? "Now playing · Complete" : "Now playing · Chapter " + tr.num;
+    npTitle.textContent = tr.short === tr.title ? tr.title : tr.title;
+    npTitle.textContent = tr.title;
+    tElapsed.textContent = "0:00";
+    tTotal.textContent = tr.durLabel;
+    seek.value = 0;
+    seek.style.setProperty("--fill", "0%");
+    updateRows();
+    updateMediaSession();
+    var row = document.getElementById("row-" + tr.id);
+    if (row && autoplay) { /* keep the list where the user left it */ }
+    if (autoplay) {
+      var p = audio.play();
+      if (p && p.catch) p.catch(function(){ /* user gesture covers this; ignore */ });
+    }
+  }
+
+  function togglePlay(){
+    if (!audio.src) { loadTrack(current, true); return; }
+    if (audio.paused) { audio.play(); } else { audio.pause(); }
+  }
+
+  function nextTrack(autoplay){
+    // From Complete, Next goes to Chapter 1; from a chapter, to the next chapter.
+    var n = current + 1;
+    if (n >= TRACKS.length) return false;
+    loadTrack(n, autoplay);
+    return true;
+  }
+
+  function prevTrack(){
+    if (audio.currentTime > 4) { audio.currentTime = 0; return; }
+    var p = current - 1;
+    if (p < 0) { audio.currentTime = 0; return; }
+    loadTrack(p, !audio.paused);
+  }
+
+  // Controls
+  btnPlay.addEventListener("click", togglePlay);
+  document.getElementById("btnNext").addEventListener("click", function(){ nextTrack(true); });
+  document.getElementById("btnPrev").addEventListener("click", prevTrack);
+  document.getElementById("btnBack").addEventListener("click", function(){
+    audio.currentTime = Math.max(0, audio.currentTime - 15);
+  });
+  document.getElementById("btnFwd").addEventListener("click", function(){
+    audio.currentTime = Math.min(trackDuration(), audio.currentTime + 30);
+  });
+  speedSel.addEventListener("change", function(){
+    audio.playbackRate = parseFloat(speedSel.value) || 1;
+  });
+
+  seek.addEventListener("input", function(){
+    seeking = true;
+    var d = trackDuration();
+    var t = (seek.value / 1000) * d;
+    tElapsed.textContent = fmt(t);
+    seek.style.setProperty("--fill", (seek.value / 10) + "%");
+  });
+  seek.addEventListener("change", function(){
+    var d = trackDuration();
+    audio.currentTime = (seek.value / 1000) * d;
+    seeking = false;
+  });
+
+  // Audio events
+  audio.addEventListener("play", function(){
+    icoPlay.style.display = "none";
+    icoPause.style.display = "";
+    btnPlay.setAttribute("aria-label", "Pause");
+    updateRows();
+    if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "playing";
+  });
+  audio.addEventListener("pause", function(){
+    icoPlay.style.display = "";
+    icoPause.style.display = "none";
+    btnPlay.setAttribute("aria-label", "Play");
+    updateRows();
+    if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "paused";
+  });
+  audio.addEventListener("loadedmetadata", function(){
+    tTotal.textContent = fmt(trackDuration());
+  });
+  audio.addEventListener("timeupdate", function(){
+    if (seeking) return;
+    var d = trackDuration();
+    var pct = d > 0 ? (audio.currentTime / d) : 0;
+    seek.value = Math.round(pct * 1000);
+    seek.style.setProperty("--fill", (pct * 100) + "%");
+    tElapsed.textContent = fmt(audio.currentTime);
+  });
+  audio.addEventListener("ended", function(){
+    // Auto-advance: chapters flow into the next chapter; Complete and the
+    // final chapter simply stop.
+    if (current >= 1 && current < TRACKS.length - 1) {
+      loadTrack(current + 1, true);
+    } else if (chainMode && current === 0) {
+      loadTrack(1, true);
+    } else {
+      seek.value = 0;
+      seek.style.setProperty("--fill", "0%");
+      tElapsed.textContent = "0:00";
+    }
+  });
+  audio.addEventListener("error", function(){
+    // Fallback: if the Complete file fails to load, chain the chapters —
+    // the identical book, chapter by chapter, so listening never stalls.
+    if (current === 0 && !chainMode && audio.src) {
+      chainMode = true;
+      fallbackNote.classList.add("show");
+      loadTrack(1, true);
+    }
+  });
+
+  // Bluetooth / steering-wheel controls
+  if ("mediaSession" in navigator) {
+    try {
+      navigator.mediaSession.setActionHandler("play", function(){ audio.play(); });
+      navigator.mediaSession.setActionHandler("pause", function(){ audio.pause(); });
+      navigator.mediaSession.setActionHandler("previoustrack", prevTrack);
+      navigator.mediaSession.setActionHandler("nexttrack", function(){ nextTrack(true); });
+      navigator.mediaSession.setActionHandler("seekbackward", function(){ audio.currentTime = Math.max(0, audio.currentTime - 15); });
+      navigator.mediaSession.setActionHandler("seekforward", function(){ audio.currentTime = Math.min(trackDuration(), audio.currentTime + 30); });
+    } catch(e) {}
+  }
+
+  // Initial state: Complete loaded, ready to press play.
+  loadTrack(0, false);
+})();
+</script>
+</body>
+</html>
