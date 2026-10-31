@@ -6,6 +6,8 @@ A bird audio detection and identification station for the Raspberry Pi 5, derive
 
 [![PerchPi setup video: from a box of parts to your first bird (4:39)](docs/images/setup-video-poster.jpg)](https://youtu.be/5rh6dXutpfg)
 
+**Rather listen?** The [New User Audio Companion](https://churchja.github.io/perchpi-release/audiobook/) is a 15-minute audiobook in five chapters, good for headphones or the car. Play it in your browser or download the MP3s.
+
 ## Status
 
 **v1** is the first public release: a ready-to-flash Raspberry Pi OS (trixie) image for the Raspberry Pi 5. It is a hobby project maintained by one person; expect rough edges (see Known issues).
@@ -17,6 +19,7 @@ A bird audio detection and identification station for the Raspberry Pi 5, derive
 Prefer to read? The Setup Guide goes step by step from a box of parts to your first detected bird.
 
 - **Setup video (4½ min):** https://youtu.be/5rh6dXutpfg
+- **Audiobook, New User Audio Companion (15 min, 5 chapters):** https://churchja.github.io/perchpi-release/audiobook/
 - **Setup Guide:** https://github.com/churchja/perchpi-release/blob/main/docs/SETUP-GUIDE.md
 - **User Manual:** https://github.com/churchja/perchpi-release/blob/main/docs/USER-MANUAL.md
 - **Printable guide with pictures (PDF):** https://github.com/churchja/perchpi-release/blob/main/docs/PerchPi-Guide.pdf
