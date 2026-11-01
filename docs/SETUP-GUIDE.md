@@ -22,6 +22,8 @@ Need help at any point? Email **perchpi@shadyacres.my**.
 5. Plug in the microphone, insert the card, and power on. It restarts once by itself. Allow about 5 minutes.
 6. Open `http://<your-hostname>.local/` and log in as `birdnet` / `birdnet`. Then **change that password** and **set your location** (section 8).
 
+Headless, Ethernet, SSH, checksums and what the image sets up: see section 11.
+
 
 ## 1. What you need
 
@@ -218,6 +220,44 @@ Where the microphone sits matters more than anything else.
 - **The web page rejects your password.** Use the **web** login (`birdnet` and the password from section 8), not the one you typed in Imager.
 
 Still stuck? Email **perchpi@shadyacres.my**. Say what you tried and what you see, and include a photo of the screen if you can.
+
+
+## 11. For Raspberry Pi hobbyists
+
+Skip this section if you followed the steps above and everything works. It's for people who are comfortable with a terminal and want to know what they're running.
+
+**Write the card with Imager and PerchPi's repository, even if you normally use other tools.** The image relies on Imager's customisation step to create your login, Wi-Fi, hostname and time zone. Writing the `.img.xz` with `dd`, balenaEtcher or Imager's "Use custom" skips that step, and the card boots with no user and no network. That route isn't supported.
+
+**Check a manual download (optional).** Imager checks the image by itself. If you download `perchpi-v1-20261020.img.xz` from the [release page](https://github.com/churchja/perchpi-release/releases/latest) to keep a copy, compare it with the sha256 in the release notes:
+
+Mac:
+```
+shasum -a 256 perchpi-v1-20261020.img.xz
+```
+Linux:
+```
+sha256sum perchpi-v1-20261020.img.xz
+```
+
+**Headless is fine.** The touchscreen is optional. With no screen, the station runs exactly the same; you use it from a browser.
+
+**Ethernet instead of Wi-Fi.** Plug a network cable into the Pi before the first start. You can leave Wi-Fi empty in Imager's customisation.
+
+**SSH.** Turn it on in Imager's customisation, then log in with the username you set there:
+```
+ssh <your-username>@<your-hostname>.local
+```
+Your Imager user has `sudo`. PerchPi's own programs run as a separate service user, `birder`, which you don't log in as.
+
+**What the image sets up.** Raspberry Pi OS (trixie, 64-bit) with the desktop for the kiosk, and on top of it:
+- the PerchPi code in `/home/birder/BirdNET-Pi`,
+- recording and analysis services, a Caddy web server on port 80, and timers for retention, bird photos, weather and the weekly geomodel update,
+- microphone capture bound by **name** to the UGREEN US205 in `/etc/asound.conf`, so it keeps working when USB devices are renumbered,
+- the Chromium kiosk, started by the desktop auto-login on any attached screen.
+
+The full list of services, files and logs, with commands to check each one, is in the [User Manual's Technical reference](USER-MANUAL.md#technical-reference-for-raspberry-pi-hobbyists).
+
+**Things that are untested from this image:** booting from NVMe (it runs on the developer's station, but not from this image), other USB sound adapters, other microphones, and other Raspberry Pi models.
 
 For day-to-day use, see the **PerchPi User Manual**:
 https://github.com/churchja/perchpi-release/blob/main/docs/USER-MANUAL.md
