@@ -5,6 +5,8 @@ https://github.com/churchja/perchpi-release/blob/main/docs/SETUP-GUIDE.md
 
 Questions or problems? Email **perchpi@shadyacres.my**.
 
+Comfortable with SSH? The [Technical reference](#technical-reference-for-raspberry-pi-hobbyists) at the end lists PerchPi's services, files and logs.
+
 **Prefer paper?** The illustrated, printable guide: [PerchPi-Guide.pdf](https://github.com/churchja/perchpi-release/blob/main/docs/PerchPi-Guide.pdf)
 
 
@@ -169,6 +171,96 @@ Email **perchpi@shadyacres.my**. Include:
 PerchPi is a hobby project maintained by one person, so allow a few days for a reply.
 
 *Screens in this manual show example data. Northern Cardinal photo: U.S. Geological Survey, Columbia Environmental Research Center (public domain).*
+
+
+## Technical reference (for Raspberry Pi hobbyists)
+
+You never need this section for everyday use. It's for people who log in over SSH (turned on in Imager's customisation; see the Setup Guide, section 11). Commands that only read are safe. Anything that edits a file or restarts a service can stop the station recording, so note what you change.
+
+### Where things live
+
+| What | Where |
+|---|---|
+| PerchPi code | `/home/birder/BirdNET-Pi` (owned by the service user `birder`) |
+| Settings file | `/etc/birdnet/birdnet.conf`, linked from `/home/birder/BirdNET-Pi/birdnet.conf`. Change settings on the web pages instead when you can. **Keep it a link**: if the link is replaced by a copy, the web pages and the services read different settings. |
+| Detection database | `/home/birder/BirdNET-Pi/scripts/birds.db` (SQLite) |
+| Recordings and spectrograms | `/home/birder/BirdSongs/Extracted/By_Date` |
+| Microphone setup | `/etc/asound.conf` |
+| Kiosk launcher | `/home/birder/.config/labwc/autostart` (its browser profile lives in `/tmp`, which is in memory) |
+
+### Background programs
+
+| Program | What it does |
+|---|---|
+| `birdnet_recording` | Records the microphone in 15-second pieces |
+| `birdnet_analysis` | Identifies birds in each piece and saves detections |
+| `perchpi-live-audio-stream` | Feeds **Live Audio** |
+| `caddy` | The web server on port 80 |
+| `birdnet_stats`, `birdnet_log`, `chart_viewer`, `spectrogram_viewer` | Charts, the log viewer and the live spectrogram |
+| `perchpi-kiosk-guard` | Keeps the touchscreen's auto-login on `birder` |
+| Timers: `perchpi-retention`, `perchpi-refresh-bird-photos`, `perchpi-weather-poll`, `perchpi-geomodel-weekly` | Old-clip clean-up, bird photos, weather, and the weekly species-likelihood update |
+| Cron jobs for `birder` | The Perch check and the AI checker (every minute) and a watchdog that notices when detections stop (every 15 minutes) |
+
+Two units ship turned off on purpose: `web_terminal` and `perchpi-archive` (an archive to a network share, which needs setup this image doesn't do).
+
+### Checking on it
+
+Is everything running?
+```
+systemctl --failed
+```
+On v1, two cloud-init units show here after the first start. That's a known issue and harmless; anything else is worth a look.
+
+Status of recording and analysis:
+```
+systemctl status birdnet_recording birdnet_analysis --no-pager
+```
+
+Watch detections as they happen (Ctrl-C to stop):
+```
+journalctl -u birdnet_analysis -f
+```
+
+When each timer last ran and runs next:
+```
+systemctl list-timers 'perchpi-*' --no-pager
+```
+
+The cron jobs:
+```
+sudo -u birder crontab -l
+```
+
+Temperature and free space:
+```
+vcgencmd measure_temp; df -h /
+```
+
+The sound devices the Pi sees, and the one PerchPi records from:
+```
+cat /proc/asound/cards; grep CARD= /etc/asound.conf
+```
+
+The Perch check's log (Ctrl-C to stop):
+```
+tail -f /home/birder/BirdNET-Pi/perch/worker.log
+```
+
+### A different USB sound adapter (unsupported)
+
+PerchPi records from the sound card **named** in `/etc/asound.conf` (the `hw:CARD=…` line). A different adapter has a different name, which is why the station then records nothing. To try one anyway, find its name with `cat /proc/asound/cards`, put that name in the `hw:CARD=…` line with `sudo nano /etc/asound.conf`, then restart capture:
+```
+sudo systemctl restart birdnet_recording perchpi-live-audio-stream
+```
+Check **Live Audio** afterwards. Detection quality with other hardware is untested, and the detection settings are tuned for the recommended microphone.
+
+### Restarting safely
+
+Use gear → **System Controls** → **Reboot** or **Shutdown** in the web page, or over SSH:
+```
+sudo reboot
+```
+Never pull the power while it's running.
 
 
 ## About PerchPi
