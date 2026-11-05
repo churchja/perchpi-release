@@ -248,7 +248,7 @@ tail -f /home/birder/BirdNET-Pi/perch/worker.log
 
 ### A different USB sound adapter (unsupported)
 
-PerchPi records from the sound card **named** in `/etc/asound.conf` (the `hw:CARD=…` line). A different adapter has a different name, which is why the station then records nothing. To try one anyway, find its name with `cat /proc/asound/cards`, put that name in the `hw:CARD=…` line with `sudo nano /etc/asound.conf`, then restart capture:
+PerchPi records from the sound card **named** in `/etc/asound.conf` (the `hw:CARD=…` line). A different adapter has a different name, which is why the station then records nothing. To try one anyway, find its short name (the word in square brackets) with `cat /proc/asound/cards`, put that name in the `hw:CARD=…` line with `sudo nano /etc/asound.conf`, then restart capture:
 ```
 sudo systemctl restart birdnet_recording perchpi-live-audio-stream
 ```

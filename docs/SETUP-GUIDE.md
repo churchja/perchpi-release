@@ -226,7 +226,7 @@ Still stuck? Email **perchpi@shadyacres.my**. Say what you tried and what you se
 
 Skip this section if you followed the steps above and everything works. It's for people who are comfortable with a terminal and want to know what they're running.
 
-**Write the card with Imager and PerchPi's repository, even if you normally use other tools.** The image relies on Imager's customisation step to create your login, Wi-Fi, hostname and time zone. Writing the `.img.xz` with `dd`, balenaEtcher or Imager's "Use custom" skips that step, and the card boots with no user and no network. That route isn't supported.
+**Write the card with Imager and PerchPi's repository, even if you normally use other tools.** The image relies on Imager's customisation step to create your login, Wi-Fi, hostname and time zone. Writing the `.img.xz` with `dd`, balenaEtcher or Imager's "Use custom" skips that step, and the card boots with no login and no Wi-Fi. That route isn't supported.
 
 **Check a manual download (optional).** Imager checks the image by itself. If you download `perchpi-v1-20261020.img.xz` from the [release page](https://github.com/churchja/perchpi-release/releases/latest) to keep a copy, compare it with the sha256 in the release notes:
 
