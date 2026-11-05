@@ -23,6 +23,7 @@ Prefer to read? The Setup Guide goes step by step from a box of parts to your fi
 - **Setup Guide:** https://github.com/churchja/perchpi-release/blob/main/docs/SETUP-GUIDE.md
 - **User Manual:** https://github.com/churchja/perchpi-release/blob/main/docs/USER-MANUAL.md
 - **Printable guide with pictures (PDF):** https://github.com/churchja/perchpi-release/blob/main/docs/PerchPi-Guide.pdf
+- **Technical reference for Pi hobbyists:** https://github.com/churchja/perchpi-release/blob/main/docs/USER-MANUAL.md#technical-reference-for-raspberry-pi-hobbyists
 - **Microphone hood files (STL and 3MF):** https://github.com/churchja/perchpi-release/tree/main/hardware/em272-hood
 - **Help:** perchpi@shadyacres.my
 
@@ -58,12 +59,18 @@ You need **Raspberry Pi Imager 2.0 or newer** (https://www.raspberrypi.com/softw
 
 Imager checks the written image against its sha256 by itself. For a manual download, the release notes list the image file, its size, both sha256s (the `.img.xz` download and the extracted `.img`), and the commit the image was built from.
 
+**Comfortable with a Raspberry Pi?** Headless and Ethernet setups, SSH, checking a manual download, and what the image sets up are in the [Setup Guide, section 11](docs/SETUP-GUIDE.md#11-for-raspberry-pi-hobbyists). Services, files and logs are in the [User Manual's Technical reference](docs/USER-MANUAL.md#technical-reference-for-raspberry-pi-hobbyists). Write the card with Imager as above even so: `dd`, balenaEtcher and "Use custom" all skip the customisation step.
+
 ## First boot
 
 - Open `http://<your-hostname>.local/` in a browser.
 - Log in with **`birdnet` / `birdnet`**, then change the password: gear icon (top right) → **Advanced Settings** → scroll to **BirdNET-Pi Password** → **Update Settings** (letters and numbers only).
 - **Set your location:** gear icon → **Settings** → **Location** (at most 4 decimals) → **Update Settings**. The image ships with the Cornell Lab of Ornithology's coordinates (42.4800, −76.4510), so species likelihood and weather are wrong until you change them.
 - The time zone comes from Imager's customisation. If you skipped it, the image defaults to America/Chicago.
+
+## Updating
+
+There's no in-app update. A new version means writing a new card with Imager, which replaces everything on it. Before you do, use gear → **System Controls** → **Backup data**, and note your settings by hand (see Known issues). New versions are listed on the [releases page](https://github.com/churchja/perchpi-release/releases). The next one, v1.1, is being planned in the open: [docs/V1.1-PLAN.md](docs/V1.1-PLAN.md).
 
 ## Known issues (v1)
 
